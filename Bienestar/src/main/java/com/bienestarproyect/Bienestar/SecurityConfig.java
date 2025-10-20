@@ -41,8 +41,8 @@ public class SecurityConfig {
                   "/swagger-ui/**",
                   "/v3/api-docs/**",
                   "/swagger-ui.html",
-                  "/login","/login.html",
-                  "/css/**","/js/**","/images/**","/favicon.ico",
+                  "/login", "/login.html",
+                  "/css/**", "/js/**", "/images/**", "/favicon.ico",
                   "/h2-console/**"
               ).permitAll()
               .requestMatchers("/api/admin/**").hasRole("ADMIN")
