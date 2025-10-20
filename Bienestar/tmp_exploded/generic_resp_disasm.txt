@@ -1,0 +1,503 @@
+Compiled from "GenericResponseService.java"
+public class org.springdoc.core.service.GenericResponseService {
+  public org.springdoc.core.service.GenericResponseService(org.springdoc.core.service.OperationService, java.util.List<org.springdoc.core.parsers.ReturnTypeParser>, org.springdoc.core.properties.SpringDocConfigProperties, org.springdoc.core.utils.PropertyResolverUtils);
+    Code:
+         0: aload_0
+         1: invokespecial #3                  // Method java/lang/Object."<init>":()V
+         4: aload_0
+         5: new           #9                  // class java/util/concurrent/CopyOnWriteArrayList
+         8: dup
+         9: invokespecial #11                 // Method java/util/concurrent/CopyOnWriteArrayList."<init>":()V
+        12: putfield      #12                 // Field controllerAdviceInfos:Ljava/util/List;
+        15: aload_0
+        16: new           #9                  // class java/util/concurrent/CopyOnWriteArrayList
+        19: dup
+        20: invokespecial #11                 // Method java/util/concurrent/CopyOnWriteArrayList."<init>":()V
+        23: putfield      #18                 // Field localExceptionHandlers:Ljava/util/List;
+        26: aload_0
+        27: new           #21                 // class java/util/concurrent/locks/ReentrantLock
+        30: dup
+        31: invokespecial #23                 // Method java/util/concurrent/locks/ReentrantLock."<init>":()V
+        34: putfield      #24                 // Field reentrantLock:Ljava/util/concurrent/locks/Lock;
+        37: aload_0
+        38: aload_1
+        39: putfield      #28                 // Field operationService:Lorg/springdoc/core/service/OperationService;
+        42: aload_0
+        43: aload_2
+        44: putfield      #32                 // Field returnTypeParsers:Ljava/util/List;
+        47: aload_0
+        48: aload_3
+        49: putfield      #35                 // Field springDocConfigProperties:Lorg/springdoc/core/properties/SpringDocConfigProperties;
+        52: aload_0
+        53: aload         4
+        55: putfield      #39                 // Field propertyResolverUtils:Lorg/springdoc/core/utils/PropertyResolverUtils;
+        58: return
+
+  public static void buildContentFromDoc(io.swagger.v3.oas.models.Components, io.swagger.v3.oas.models.responses.ApiResponses, org.springdoc.core.models.MethodAttributes, io.swagger.v3.oas.annotations.responses.ApiResponse, io.swagger.v3.oas.models.responses.ApiResponse, boolean);
+    Code:
+         0: aload_3
+         1: invokeinterface #43,  1           // InterfaceMethod io/swagger/v3/oas/annotations/responses/ApiResponse.content:()[Lio/swagger/v3/oas/annotations/media/Content;
+         6: astore        6
+         8: aload         6
+        10: iconst_0
+        11: anewarray     #49                 // class java/lang/String
+        14: aload_2
+        15: invokevirtual #51                 // Method org/springdoc/core/models/MethodAttributes.getMethodProduces:()[Ljava/lang/String;
+        18: aconst_null
+        19: aload_0
+        20: aload_2
+        21: invokevirtual #57                 // Method org/springdoc/core/models/MethodAttributes.getJsonViewAnnotation:()Lcom/fasterxml/jackson/annotation/JsonView;
+        24: iload         5
+        26: invokestatic  #61                 // Method org/springdoc/core/utils/SpringDocAnnotationsUtils.getContent:([Lio/swagger/v3/oas/annotations/media/Content;[Ljava/lang/String;[Ljava/lang/String;Lio/swagger/v3/oas/models/media/Schema;Lio/swagger/v3/oas/models/Components;Lcom/fasterxml/jackson/annotation/JsonView;Z)Ljava/util/Optional;
+        29: astore        7
+        31: aload_1
+        32: aload_3
+        33: invokeinterface #67,  1           // InterfaceMethod io/swagger/v3/oas/annotations/responses/ApiResponse.responseCode:()Ljava/lang/String;
+        38: invokevirtual #71                 // Method io/swagger/v3/oas/models/responses/ApiResponses.containsKey:(Ljava/lang/Object;)Z
+        41: ifeq          158
+        44: aload_1
+        45: aload_3
+        46: invokeinterface #67,  1           // InterfaceMethod io/swagger/v3/oas/annotations/responses/ApiResponse.responseCode:()Ljava/lang/String;
+        51: invokevirtual #77                 // Method io/swagger/v3/oas/models/responses/ApiResponses.get:(Ljava/lang/Object;)Ljava/lang/Object;
+        54: checkcast     #81                 // class io/swagger/v3/oas/models/responses/ApiResponse
+        57: invokevirtual #83                 // Method io/swagger/v3/oas/models/responses/ApiResponse.getContent:()Lio/swagger/v3/oas/models/media/Content;
+        60: astore        8
+        62: aload         7
+        64: invokevirtual #86                 // Method java/util/Optional.isPresent:()Z
+        67: ifeq          147
+        70: aload         7
+        72: invokevirtual #92                 // Method java/util/Optional.get:()Ljava/lang/Object;
+        75: checkcast     #95                 // class io/swagger/v3/oas/models/media/Content
+        78: astore        9
+        80: aload_2
+        81: invokevirtual #97                 // Method org/springdoc/core/models/MethodAttributes.isMethodOverloaded:()Z
+        84: ifeq          136
+        87: aload         8
+        89: ifnull        136
+        92: aload_2
+        93: invokevirtual #51                 // Method org/springdoc/core/models/MethodAttributes.getMethodProduces:()[Ljava/lang/String;
+        96: invokestatic  #100                // Method java/util/Arrays.stream:([Ljava/lang/Object;)Ljava/util/stream/Stream;
+        99: aload         9
+       101: invokedynamic #106,  0            // InvokeDynamic #0:test:(Lio/swagger/v3/oas/models/media/Content;)Ljava/util/function/Predicate;
+       106: invokeinterface #110,  2          // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+       111: aload         9
+       113: aload         8
+       115: invokedynamic #116,  0            // InvokeDynamic #1:accept:(Lio/swagger/v3/oas/models/media/Content;Lio/swagger/v3/oas/models/media/Content;)Ljava/util/function/Consumer;
+       120: invokeinterface #120,  2          // InterfaceMethod java/util/stream/Stream.forEach:(Ljava/util/function/Consumer;)V
+       125: aload         4
+       127: aload         8
+       129: invokevirtual #124                // Method io/swagger/v3/oas/models/responses/ApiResponse.content:(Lio/swagger/v3/oas/models/media/Content;)Lio/swagger/v3/oas/models/responses/ApiResponse;
+       132: pop
+       133: goto          144
+       136: aload         4
+       138: aload         9
+       140: invokevirtual #124                // Method io/swagger/v3/oas/models/responses/ApiResponse.content:(Lio/swagger/v3/oas/models/media/Content;)Lio/swagger/v3/oas/models/responses/ApiResponse;
+       143: pop
+       144: goto          155
+       147: aload         4
+       149: aload         8
+       151: invokevirtual #124                // Method io/swagger/v3/oas/models/responses/ApiResponse.content:(Lio/swagger/v3/oas/models/media/Content;)Lio/swagger/v3/oas/models/responses/ApiResponse;
+       154: pop
+       155: goto          175
+       158: aload         7
+       160: aload         4
+       162: dup
+       163: invokestatic  #127                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+       166: pop
+       167: invokedynamic #132,  0            // InvokeDynamic #2:accept:(Lio/swagger/v3/oas/models/responses/ApiResponse;)Ljava/util/function/Consumer;
+       172: invokevirtual #135                // Method java/util/Optional.ifPresent:(Ljava/util/function/Consumer;)V
+       175: return
+
+  public static void setDescription(java.lang.String, io.swagger.v3.oas.models.responses.ApiResponse);
+    Code:
+         0: aload_0
+         1: invokestatic  #138                // Method java/lang/Integer.parseInt:(Ljava/lang/String;)I
+         4: invokestatic  #144                // Method org/springframework/http/HttpStatus.valueOf:(I)Lorg/springframework/http/HttpStatus;
+         7: astore_2
+         8: aload_1
+         9: aload_2
+        10: invokevirtual #150                // Method org/springframework/http/HttpStatus.getReasonPhrase:()Ljava/lang/String;
+        13: invokevirtual #153                // Method io/swagger/v3/oas/models/responses/ApiResponse.setDescription:(Ljava/lang/String;)V
+        16: goto          26
+        19: astore_2
+        20: aload_1
+        21: ldc           #159                // String default response
+        23: invokevirtual #153                // Method io/swagger/v3/oas/models/responses/ApiResponse.setDescription:(Ljava/lang/String;)V
+        26: return
+      Exception table:
+         from    to  target type
+             0    16    19   Class java/lang/IllegalArgumentException
+
+  public static void setResponseEntityExceptionHandlerClass(java.lang.Class<?>);
+    Code:
+         0: aload_0
+         1: putstatic     #161                // Field responseEntityExceptionHandlerClass:Ljava/lang/Class;
+         4: return
+
+  public io.swagger.v3.oas.models.responses.ApiResponses build(io.swagger.v3.oas.models.Components, org.springframework.web.method.HandlerMethod, io.swagger.v3.oas.models.Operation, org.springdoc.core.models.MethodAttributes);
+    Code:
+         0: aload_0
+         1: aload_2
+         2: invokevirtual #165                // Method getGenericMapResponse:(Lorg/springframework/web/method/HandlerMethod;)Ljava/util/Map;
+         5: astore        5
+         7: aload_0
+         8: getfield      #35                 // Field springDocConfigProperties:Lorg/springdoc/core/properties/SpringDocConfigProperties;
+        11: invokevirtual #169                // Method org/springdoc/core/properties/SpringDocConfigProperties.isOverrideWithGenericResponse:()Z
+        14: ifeq          26
+        17: aload_0
+        18: aload_2
+        19: aload         5
+        21: invokevirtual #174                // Method filterAndEnrichGenericMapResponseByDeclarations:(Lorg/springframework/web/method/HandlerMethod;Ljava/util/Map;)Ljava/util/Map;
+        24: astore        5
+        26: aload         4
+        28: aload         5
+        30: invokevirtual #178                // Method org/springdoc/core/models/MethodAttributes.calculateGenericMapResponse:(Ljava/util/Map;)Lio/swagger/v3/oas/models/responses/ApiResponses;
+        33: astore        6
+        35: aload_3
+        36: invokevirtual #182                // Method io/swagger/v3/oas/models/Operation.getResponses:()Lio/swagger/v3/oas/models/responses/ApiResponses;
+        39: astore        7
+        41: aload         7
+        43: invokestatic  #188                // Method org/springframework/util/CollectionUtils.isEmpty:(Ljava/util/Map;)Z
+        46: ifne          66
+        49: aload         7
+        51: aload         6
+        53: dup
+        54: invokestatic  #127                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+        57: pop
+        58: invokedynamic #194,  0            // InvokeDynamic #3:accept:(Lio/swagger/v3/oas/models/responses/ApiResponses;)Ljava/util/function/BiConsumer;
+        63: invokevirtual #197                // Method io/swagger/v3/oas/models/responses/ApiResponses.forEach:(Ljava/util/function/BiConsumer;)V
+        66: aload_0
+        67: aload_1
+        68: aload_2
+        69: invokevirtual #200                // Method org/springframework/web/method/HandlerMethod.getReturnType:()Lorg/springframework/core/MethodParameter;
+        72: aload         6
+        74: aload         4
+        76: aload_0
+        77: getfield      #35                 // Field springDocConfigProperties:Lorg/springdoc/core/properties/SpringDocConfigProperties;
+        80: invokevirtual #206                // Method org/springdoc/core/properties/SpringDocConfigProperties.isOpenapi31:()Z
+        83: aload         4
+        85: invokevirtual #209                // Method org/springdoc/core/models/MethodAttributes.getLocale:()Ljava/util/Locale;
+        88: invokevirtual #213                // Method computeResponseFromDoc:(Lio/swagger/v3/oas/models/Components;Lorg/springframework/core/MethodParameter;Lio/swagger/v3/oas/models/responses/ApiResponses;Lorg/springdoc/core/models/MethodAttributes;ZLjava/util/Locale;)Ljava/util/Map;
+        91: pop
+        92: aload_0
+        93: aload_1
+        94: aload_2
+        95: invokevirtual #200                // Method org/springframework/web/method/HandlerMethod.getReturnType:()Lorg/springframework/core/MethodParameter;
+        98: aload         6
+       100: aload         4
+       102: invokevirtual #217                // Method buildApiResponses:(Lio/swagger/v3/oas/models/Components;Lorg/springframework/core/MethodParameter;Lio/swagger/v3/oas/models/responses/ApiResponses;Lorg/springdoc/core/models/MethodAttributes;)V
+       105: aload         6
+       107: areturn
+
+  public void buildGenericResponse(io.swagger.v3.oas.models.Components, java.util.Map<java.lang.String, java.lang.Object>, java.util.Locale);
+    Code:
+         0: aload_2
+         1: invokeinterface #227,  1          // InterfaceMethod java/util/Map.entrySet:()Ljava/util/Set;
+         6: invokeinterface #233,  1          // InterfaceMethod java/util/Set.iterator:()Ljava/util/Iterator;
+        11: astore        4
+        13: aload         4
+        15: invokeinterface #239,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+        20: ifeq          431
+        23: aload         4
+        25: invokeinterface #244,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+        30: checkcast     #247                // class java/util/Map$Entry
+        33: astore        5
+        35: new           #293                // class java/util/ArrayList
+        38: dup
+        39: invokespecial #295                // Method java/util/ArrayList."<init>":()V
+        42: astore        6
+        44: aload         5
+        46: invokeinterface #249,  1          // InterfaceMethod java/util/Map$Entry.getValue:()Ljava/lang/Object;
+        51: astore        7
+        53: aload         7
+        55: invokevirtual #296                // Method java/lang/Object.getClass:()Ljava/lang/Class;
+        58: astore        8
+        60: aload         7
+        62: invokestatic  #300                // Method org/springframework/aop/support/AopUtils.isAopProxy:(Ljava/lang/Object;)Z
+        65: ifeq          75
+        68: aload         7
+        70: invokestatic  #305                // Method org/springframework/aop/support/AopUtils.getTargetClass:(Ljava/lang/Object;)Ljava/lang/Class;
+        73: astore        8
+        75: new           #309                // class org/springdoc/core/models/ControllerAdviceInfo
+        78: dup
+        79: aload         7
+        81: invokespecial #311                // Method org/springdoc/core/models/ControllerAdviceInfo."<init>":(Ljava/lang/Object;)V
+        84: astore        9
+        86: aload         8
+        88: invokestatic  #314                // Method org/springframework/util/ReflectionUtils.getAllDeclaredMethods:(Ljava/lang/Class;)[Ljava/lang/reflect/Method;
+        91: invokestatic  #100                // Method java/util/Arrays.stream:([Ljava/lang/Object;)Ljava/util/stream/Stream;
+        94: aload_0
+        95: invokedynamic #320,  0            // InvokeDynamic #4:test:(Lorg/springdoc/core/service/GenericResponseService;)Ljava/util/function/Predicate;
+       100: invokeinterface #110,  2          // InterfaceMethod java/util/stream/Stream.filter:(Ljava/util/function/Predicate;)Ljava/util/stream/Stream;
+       105: aload         6
+       107: dup
+       108: invokestatic  #127                // Method java/util/Objects.requireNonNull:(Ljava/lang/Object;)Ljava/lang/Object;
+       111: pop
+       112: invokedynamic #323,  0            // InvokeDynamic #5:accept:(Ljava/util/List;)Ljava/util/function/Consumer;
+       117: invokeinterface #120,  2          // InterfaceMethod java/util/stream/Stream.forEach:(Ljava/util/function/Consumer;)V
+       122: aload         6
+       124: invokeinterface #326,  1          // InterfaceMethod java/util/List.iterator:()Ljava/util/Iterator;
+       129: astore        10
+       131: aload         10
+       133: invokeinterface #239,  1          // InterfaceMethod java/util/Iterator.hasNext:()Z
+       138: ifeq          390
+       141: aload         10
+       143: invokeinterface #244,  1          // InterfaceMethod java/util/Iterator.next:()Ljava/lang/Object;
+       148: checkcast     #266                // class java/lang/reflect/Method
+       151: astore        11
+       153: aload_0
+       154: getfield      #28                 // Field operationService:Lorg/springdoc/core/service/OperationService;
+       157: aload         11
+       159: invokevirtual #329                // Method org/springdoc/core/service/OperationService.isHidden:(Ljava/lang/reflect/Method;)Z
+       162: ifne          387
+       165: aload         11
+       167: ldc_w         #333                // class org/springframework/web/bind/annotation/RequestMapping
+       170: invokestatic  #335                // Method org/springframework/core/annotation/AnnotatedElementUtils.findMergedAnnotation:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/lang/annotation/Annotation;
+       173: checkcast     #333                // class org/springframework/web/bind/annotation/RequestMapping
+       176: astore        12
+       178: iconst_1
+       179: anewarray     #49                 // class java/lang/String
+       182: dup
+       183: iconst_0
+       184: aload_0
+       185: getfield      #35                 // Field springDocConfigProperties:Lorg/springdoc/core/properties/SpringDocConfigProperties;
+       188: invokevirtual #341                // Method org/springdoc/core/properties/SpringDocConfigProperties.getDefaultProducesMediaType:()Ljava/lang/String;
+       191: aastore
+       192: astore        13
+       194: aload         12
+       196: ifnull        208
+       199: aload         12
+       201: invokeinterface #344,  1          // InterfaceMethod org/springframework/web/bind/annotation/RequestMapping.produces:()[Ljava/lang/String;
+       206: astore        13
+       208: new           #347                // class org/springframework/core/MethodParameter
+       211: dup
+       212: aload         11
+       214: iconst_m1
+       215: invokespecial #349                // Method org/springframework/core/MethodParameter."<init>":(Ljava/lang/reflect/Method;I)V
+       218: astore        14
+       220: new           #352                // class org/springdoc/core/models/MethodAdviceInfo
+       223: dup
+       224: aload         11
+       226: invokespecial #354                // Method org/springdoc/core/models/MethodAdviceInfo."<init>":(Ljava/lang/reflect/Method;)V
+       229: astore        15
+       231: aload         9
+       233: aload         15
+       235: invokevirtual #357                // Method org/springdoc/core/models/ControllerAdviceInfo.addMethodAdviceInfos:(Lorg/springdoc/core/models/MethodAdviceInfo;)V
+       238: aload_0
+       239: aload         14
+       241: invokevirtual #361                // Method getExceptionsFromExceptionHandler:(Lorg/springframework/core/MethodParameter;)Ljava/util/Set;
+       244: astore        16
+       246: aload         15
+       248: aload         16
+       250: invokevirtual #365                // Method org/springdoc/core/models/MethodAdviceInfo.setExceptions:(Ljava/util/Set;)V
+       253: aload         9
+       255: invokevirtual #369                // Method org/springdoc/core/models/ControllerAdviceInfo.getApiResponseMap:()Ljava/util/Map;
+       258: astore        17
+       260: new           #72                 // class io/swagger/v3/oas/models/responses/ApiResponses
+       263: dup
+       264: invokespecial #372                // Method io/swagger/v3/oas/models/responses/ApiResponses."<init>":()V
+       267: astore        18
+       269: new           #52                 // class org/springdoc/core/models/MethodAttributes
+       272: dup
+       273: aload         13
+       275: aload_0
+       276: getfield      #35                 // Field springDocConfigProperties:Lorg/springdoc/core/properties/SpringDocConfigProperties;
+       279: invokevirtual #373                // Method org/springdoc/core/properties/SpringDocConfigProperties.getDefaultConsumesMediaType:()Ljava/lang/String;
+       282: aload_0
+       283: getfield      #35                 // Field springDocConfigProperties:Lorg/springdoc/core/properties/SpringDocConfigProperties;
+       286: invokevirtual #341                // Method org/springdoc/core/properties/SpringDocConfigProperties.getDefaultProducesMediaType:()Ljava/lang/String;
+       289: aload         17
+       291: aload_3
+       292: invokespecial #376                // Method org/springdoc/core/models/MethodAttributes."<init>":([Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/util/Map;Ljava/util/Locale;)V
+       295: astore        19
+       297: aload         19
+       299: aload         11
+       301: ldc_w         #379                // class com/fasterxml/jackson/annotation/JsonView
+       304: invokestatic  #335                // Method org/springframework/core/annotation/AnnotatedElementUtils.findMergedAnnotation:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/lang/annotation/Annotation;
+       307: checkcast     #379                // class com/fasterxml/jackson/annotation/JsonView
+       310: invokevirtual #381                // Method org/springdoc/core/models/MethodAttributes.setJsonViewAnnotation:(Lcom/fasterxml/jackson/annotation/JsonView;)V
+       313: aload_0
+       314: getfield      #28                 // Field operationService:Lorg/springdoc/core/service/OperationService;
+       317: invokevirtual #221                // Method org/springdoc/core/service/OperationService.getJavadocProvider:()Lorg/springdoc/core/providers/JavadocProvider;
+       320: ifnull        349
+       323: aload_0
+       324: getfield      #28                 // Field operationService:Lorg/springdoc/core/service/OperationService;
+       327: invokevirtual #221                // Method org/springdoc/core/service/OperationService.getJavadocProvider:()Lorg/springdoc/core/providers/JavadocProvider;
+       330: astore        20
+       332: aload         19
+       334: aload         20
+       336: aload         14
+       338: invokevirtual #385                // Method org/springframework/core/MethodParameter.getMethod:()Ljava/lang/reflect/Method;
+       341: invokeinterface #386,  2          // InterfaceMethod org/springdoc/core/providers/JavadocProvider.getMethodJavadocReturn:(Ljava/lang/reflect/Method;)Ljava/lang/String;
+       346: invokevirtual #390                // Method org/springdoc/core/models/MethodAttributes.setJavadocReturn:(Ljava/lang/String;)V
+       349: aload_0
+       350: aload_1
+       351: aload         14
+       353: aload         18
+       355: aload         19
+       357: aload_0
+       358: getfield      #35                 // Field springDocConfigProperties:Lorg/springdoc/core/properties/SpringDocConfigProperties;
+       361: invokevirtual #206                // Method org/springdoc/core/properties/SpringDocConfigProperties.isOpenapi31:()Z
+       364: aload_3
+       365: invokevirtual #213                // Method computeResponseFromDoc:(Lio/swagger/v3/oas/models/Components;Lorg/springframework/core/MethodParameter;Lio/swagger/v3/oas/models/responses/ApiResponses;Lorg/springdoc/core/models/MethodAttributes;ZLjava/util/Locale;)Ljava/util/Map;
+       368: pop
+       369: aload_0
+       370: aload_1
+       371: aload         14
+       373: aload         18
+       375: aload         19
+       377: invokevirtual #393                // Method buildGenericApiResponses:(Lio/swagger/v3/oas/models/Components;Lorg/springframework/core/MethodParameter;Lio/swagger/v3/oas/models/responses/ApiResponses;Lorg/springdoc/core/models/MethodAttributes;)V
+       380: aload         15
+       382: aload         18
+       384: invokevirtual #396                // Method org/springdoc/core/models/MethodAdviceInfo.setApiResponses:(Lio/swagger/v3/oas/models/responses/ApiResponses;)V
+       387: goto          131
+       390: aload         8
+       392: ldc_w         #400                // class org/springframework/web/bind/annotation/ControllerAdvice
+       395: invokestatic  #402                // Method org/springframework/core/annotation/AnnotatedElementUtils.hasAnnotation:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Z
+       398: ifeq          416
+       401: aload_0
+       402: getfield      #12                 // Field controllerAdviceInfos:Ljava/util/List;
+       405: aload         9
+       407: invokeinterface #406,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+       412: pop
+       413: goto          428
+       416: aload_0
+       417: getfield      #18                 // Field localExceptionHandlers:Ljava/util/List;
+       420: aload         9
+       422: invokeinterface #406,  2          // InterfaceMethod java/util/List.add:(Ljava/lang/Object;)Z
+       427: pop
+       428: goto          13
+       431: return
+
+  public java.util.Set<io.swagger.v3.oas.annotations.responses.ApiResponse> getApiResponses(java.lang.reflect.Method);
+    Code:
+         0: aload_1
+         1: invokevirtual #409                // Method java/lang/reflect/Method.getDeclaringClass:()Ljava/lang/Class;
+         4: astore_2
+         5: aload_1
+         6: ldc_w         #527                // class io/swagger/v3/oas/annotations/responses/ApiResponses
+         9: invokestatic  #529                // Method org/springframework/core/annotation/AnnotatedElementUtils.findAllMergedAnnotations:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/util/Set;
+        12: astore_3
+        13: aload_3
+        14: invokeinterface #533,  1          // InterfaceMethod java/util/Set.stream:()Ljava/util/stream/Stream;
+        19: invokedynamic #536,  0            // InvokeDynamic #8:apply:()Ljava/util/function/Function;
+        24: invokeinterface #540,  2          // InterfaceMethod java/util/stream/Stream.flatMap:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+        29: invokestatic  #544                // Method java/util/stream/Collectors.toSet:()Ljava/util/stream/Collector;
+        32: invokeinterface #550,  2          // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+        37: checkcast     #234                // class java/util/Set
+        40: astore        4
+        42: aload_2
+        43: ldc_w         #527                // class io/swagger/v3/oas/annotations/responses/ApiResponses
+        46: invokestatic  #529                // Method org/springframework/core/annotation/AnnotatedElementUtils.findAllMergedAnnotations:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/util/Set;
+        49: astore        5
+        51: aload         4
+        53: aload         5
+        55: invokeinterface #533,  1          // InterfaceMethod java/util/Set.stream:()Ljava/util/stream/Stream;
+        60: invokedynamic #554,  0            // InvokeDynamic #9:apply:()Ljava/util/function/Function;
+        65: invokeinterface #540,  2          // InterfaceMethod java/util/stream/Stream.flatMap:(Ljava/util/function/Function;)Ljava/util/stream/Stream;
+        70: invokestatic  #544                // Method java/util/stream/Collectors.toSet:()Ljava/util/stream/Collector;
+        73: invokeinterface #550,  2          // InterfaceMethod java/util/stream/Stream.collect:(Ljava/util/stream/Collector;)Ljava/lang/Object;
+        78: checkcast     #259                // class java/util/Collection
+        81: invokeinterface #555,  2          // InterfaceMethod java/util/Set.addAll:(Ljava/util/Collection;)Z
+        86: pop
+        87: aload_1
+        88: ldc           #44                 // class io/swagger/v3/oas/annotations/responses/ApiResponse
+        90: invokestatic  #559                // Method org/springframework/core/annotation/AnnotatedElementUtils.findMergedRepeatableAnnotations:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/util/Set;
+        93: astore        6
+        95: aload         4
+        97: aload         6
+        99: invokeinterface #555,  2          // InterfaceMethod java/util/Set.addAll:(Ljava/util/Collection;)Z
+       104: pop
+       105: aload_2
+       106: ldc           #44                 // class io/swagger/v3/oas/annotations/responses/ApiResponse
+       108: invokestatic  #559                // Method org/springframework/core/annotation/AnnotatedElementUtils.findMergedRepeatableAnnotations:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/util/Set;
+       111: astore        7
+       113: aload         4
+       115: aload         7
+       117: invokeinterface #555,  2          // InterfaceMethod java/util/Set.addAll:(Ljava/util/Collection;)Z
+       122: pop
+       123: aload         4
+       125: areturn
+
+  public io.swagger.v3.oas.models.media.Content buildContent(io.swagger.v3.oas.models.Components, java.lang.annotation.Annotation[], java.lang.String[], com.fasterxml.jackson.annotation.JsonView, java.lang.reflect.Type);
+    Code:
+         0: new           #95                 // class io/swagger/v3/oas/models/media/Content
+         3: dup
+         4: invokespecial #573                // Method io/swagger/v3/oas/models/media/Content."<init>":()V
+         7: astore        6
+         9: aload_0
+        10: aload         5
+        12: invokevirtual #574                // Method isVoid:(Ljava/lang/reflect/Type;)Z
+        15: ifeq          20
+        18: aconst_null
+        19: areturn
+        20: aload_3
+        21: invokestatic  #578                // Method org/apache/commons/lang3/ArrayUtils.isNotEmpty:([Ljava/lang/Object;)Z
+        24: ifeq          69
+        27: aload_0
+        28: aload_1
+        29: aload         5
+        31: aload         4
+        33: aload_2
+        34: invokevirtual #584                // Method calculateSchema:(Lio/swagger/v3/oas/models/Components;Ljava/lang/reflect/Type;Lcom/fasterxml/jackson/annotation/JsonView;[Ljava/lang/annotation/Annotation;)Lio/swagger/v3/oas/models/media/Schema;
+        37: astore        7
+        39: aload         7
+        41: ifnull        69
+        44: new           #588                // class io/swagger/v3/oas/models/media/MediaType
+        47: dup
+        48: invokespecial #590                // Method io/swagger/v3/oas/models/media/MediaType."<init>":()V
+        51: astore        8
+        53: aload         8
+        55: aload         7
+        57: invokevirtual #591                // Method io/swagger/v3/oas/models/media/MediaType.setSchema:(Lio/swagger/v3/oas/models/media/Schema;)V
+        60: aload_0
+        61: aload_3
+        62: aload         6
+        64: aload         8
+        66: invokevirtual #595                // Method setContent:([Ljava/lang/String;Lio/swagger/v3/oas/models/media/Content;Lio/swagger/v3/oas/models/media/MediaType;)V
+        69: aload         6
+        71: areturn
+
+  public java.lang.String evaluateResponseStatus(java.lang.reflect.Method, java.lang.Class<?>, boolean);
+    Code:
+         0: aconst_null
+         1: astore        4
+         3: aload_1
+         4: ldc_w         #523                // class org/springframework/web/bind/annotation/ResponseStatus
+         7: invokestatic  #335                // Method org/springframework/core/annotation/AnnotatedElementUtils.findMergedAnnotation:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/lang/annotation/Annotation;
+        10: checkcast     #523                // class org/springframework/web/bind/annotation/ResponseStatus
+        13: astore        5
+        15: aload         5
+        17: ifnonnull     36
+        20: aload_2
+        21: ifnull        36
+        24: aload_2
+        25: ldc_w         #523                // class org/springframework/web/bind/annotation/ResponseStatus
+        28: invokestatic  #335                // Method org/springframework/core/annotation/AnnotatedElementUtils.findMergedAnnotation:(Ljava/lang/reflect/AnnotatedElement;Ljava/lang/Class;)Ljava/lang/annotation/Annotation;
+        31: checkcast     #523                // class org/springframework/web/bind/annotation/ResponseStatus
+        34: astore        5
+        36: aload         5
+        38: ifnull        56
+        41: aload         5
+        43: invokeinterface #670,  1          // InterfaceMethod org/springframework/web/bind/annotation/ResponseStatus.code:()Lorg/springframework/http/HttpStatus;
+        48: invokevirtual #674                // Method org/springframework/http/HttpStatus.value:()I
+        51: invokestatic  #677                // Method java/lang/String.valueOf:(I)Ljava/lang/String;
+        54: astore        4
+        56: aload         5
+        58: ifnonnull     76
+        61: iload_3
+        62: ifne          76
+        65: getstatic     #680                // Field org/springframework/http/HttpStatus.OK:Lorg/springframework/http/HttpStatus;
+        68: invokevirtual #674                // Method org/springframework/http/HttpStatus.value:()I
+        71: invokestatic  #677                // Method java/lang/String.valueOf:(I)Ljava/lang/String;
+        74: astore        4
+        76: aload         4
+        78: areturn
+
+  static {};
+    Code:
+         0: ldc           #13                 // class org/springdoc/core/service/GenericResponseService
+         2: invokestatic  #879                // Method org/slf4j/LoggerFactory.getLogger:(Ljava/lang/Class;)Lorg/slf4j/Logger;
+         5: putstatic     #784                // Field LOGGER:Lorg/slf4j/Logger;
+         8: return
+}
