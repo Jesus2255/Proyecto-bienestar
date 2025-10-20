@@ -1,0 +1,105 @@
+# Spring Boot Application Properties - Example Configuration
+# =============================================================
+# Este archivo es un ejemplo de configuración para conectar Spring Boot a Supabase (Postgres)
+# usando variables de entorno. Cópialo como "application.properties" o integra estos
+# ajustes en tu archivo de propiedades existente.
+
+# Nombre de la aplicación
+spring.application.name=Bienestar
+
+# =============================================================
+# CONFIGURACIÓN DE BASE DE DATOS - SUPABASE (POSTGRES)
+# =============================================================
+
+# Datasource principal - usa la variable de entorno DATABASE_URL
+# Esta variable debe tener el formato: postgres://user:password@host:port/database
+# La clase DataSourceConfig.java se encarga de parsear esta URL y configurar el DataSource
+spring.datasource.url=${DATABASE_URL:jdbc:h2:mem:testdb}
+spring.datasource.driver-class-name=${DB_DRIVER:org.h2.Driver}
+
+# Nota: Si DATABASE_URL no está definida, se usa H2 como base de datos en memoria para desarrollo
+# Para usar Supabase, asegúrate de definir DATABASE_URL en tu archivo .env o como variable de entorno
+
+# =============================================================
+# CONFIGURACIÓN JPA/HIBERNATE
+# =============================================================
+
+# Estrategia de actualización de esquema
+# - update: actualiza el esquema automáticamente según las entidades
+# - validate: valida que el esquema coincida con las entidades
+# - create: crea el esquema desde cero (¡cuidado! elimina datos existentes)
+# - create-drop: crea al inicio y elimina al cerrar (solo para testing)
+spring.jpa.hibernate.ddl-auto=update
+
+# Mostrar queries SQL en logs (útil para debugging)
+spring.jpa.show-sql=false
+
+# Formatear SQL en logs para mejor legibilidad
+spring.jpa.properties.hibernate.format_sql=true
+
+# Dialecto de Hibernate para PostgreSQL
+# (Hibernate lo detecta automáticamente, pero se puede especificar explícitamente)
+# spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+
+# =============================================================
+# CONFIGURACIÓN DE POOL DE CONEXIONES - HIKARI
+# =============================================================
+# HikariCP es el pool de conexiones por defecto de Spring Boot
+
+# Número máximo de conexiones en el pool
+spring.datasource.hikari.maximum-pool-size=10
+
+# Tiempo máximo de espera para obtener una conexión (en milisegundos)
+spring.datasource.hikari.connection-timeout=30000
+
+# Tiempo máximo de vida de una conexión (en milisegundos)
+# Supabase puede cerrar conexiones inactivas, así que es bueno rotar las conexiones
+spring.datasource.hikari.max-lifetime=1800000
+
+# Tiempo máximo que una conexión puede estar inactiva (en milisegundos)
+spring.datasource.hikari.idle-timeout=600000
+
+# Nombre del pool (para identificarlo en logs)
+spring.datasource.hikari.pool-name=BienestarHikariPool
+
+# =============================================================
+# CONFIGURACIÓN DE SEGURIDAD
+# =============================================================
+
+# Usuario y contraseña por defecto de Spring Security
+spring.security.user.name=admin
+spring.security.user.password=1234
+
+# =============================================================
+# LOGGING
+# =============================================================
+
+# Nivel de log para Spring Framework
+logging.level.org.springframework=INFO
+
+# Nivel de log para Hibernate SQL
+logging.level.org.hibernate.SQL=DEBUG
+
+# Nivel de log para parámetros de Hibernate
+logging.level.org.hibernate.type.descriptor.sql.BasicBinder=TRACE
+
+# =============================================================
+# PERFILES DE SPRING BOOT
+# =============================================================
+# Puedes activar diferentes perfiles para dev/prod:
+# - dev: usa application-dev.properties (H2 en memoria)
+# - prod: usa application-prod.properties (Supabase/Postgres)
+# Activar con: spring.profiles.active=dev o spring.profiles.active=prod
+# O con variable de entorno: SPRING_PROFILES_ACTIVE=prod
+
+# spring.profiles.active=dev
+
+# =============================================================
+# NOTAS:
+# =============================================================
+# 1. Para usar Supabase, define la variable DATABASE_URL en tu .env o entorno
+# 2. La clase DataSourceConfig.java detecta automáticamente DATABASE_URL y 
+#    configura la conexión a Postgres
+# 3. Para desarrollo local sin Supabase, puedes omitir DATABASE_URL y usar H2
+# 4. En producción, configura DATABASE_URL como variable de entorno del sistema
+#    o en tu plataforma de deployment (Heroku, Vercel, Railway, etc.)
