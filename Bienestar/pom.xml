@@ -60,15 +60,26 @@
 		</dependency>
 
 		<!-- DB drivers -->
+		<!-- PostgreSQL JDBC Driver for connecting to Supabase and other PostgreSQL databases -->
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
+			<version>42.6.0</version>
 			<scope>runtime</scope>
 		</dependency>
+		<!-- H2 in-memory database for development/testing -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+
+		<!-- HikariCP connection pool - already included by spring-boot-starter-data-jpa but made explicit -->
+		<!-- Provides efficient database connection pooling for production environments -->
+		<!-- Compatible with Supabase Session Pooler and Transaction Pooler -->
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
 		</dependency>
 
 		<!-- OpenAPI / Swagger -->
