@@ -1,0 +1,23 @@
+### Ejemplo de configuración para PostgreSQL en la nube
+# NO introducir credenciales reales en este archivo del repositorio.
+# Usar variables de entorno o un archivo `.env` local (no comiteado).
+
+# Datasource - preferimos leer desde las variables de entorno que proveen plataformas
+spring.datasource.url=${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/bienestar}
+spring.datasource.username=${SPRING_DATASOURCE_USERNAME:postgres}
+spring.datasource.password=${SPRING_DATASOURCE_PASSWORD:password}
+
+# JPA / Hibernate
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=false
+
+# Pool (HikariCP)
+spring.datasource.hikari.maximum-pool-size=10
+
+# Seguridad y perfiles
+spring.profiles.active=cloud
+
+# Logging (opcional)
+logging.level.org.springframework=INFO
+logging.level.com.bienestarproyect=DEBUG
