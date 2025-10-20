@@ -1,8 +1,11 @@
 package com.bienestarproyect.Bienestar.mapper;
 
-import com.bienestarproyect.Bienestar.dto.*;
-import com.bienestarproyect.Bienestar.entity.*;
 import java.math.BigDecimal;
+
+import com.bienestarproyect.Bienestar.entity.Cita;
+import com.bienestarproyect.Bienestar.entity.Cliente;
+import com.bienestarproyect.Bienestar.entity.Factura;
+import com.bienestarproyect.Bienestar.entity.Servicio;
 
 public final class DTOMapper {
     private DTOMapper(){}
