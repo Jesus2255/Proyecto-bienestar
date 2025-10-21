@@ -52,6 +52,10 @@ Cambio rápido entre DB en nube y H2
 Scripts SQL y migraciones
 - Recomendación: usar Flyway o Liquibase para versionar scripts de la BD. De momento puedes generar las tablas con `spring.jpa.hibernate.ddl-auto=update` (no recomendado para producción).
 
+Flyway nota rápida
+- Se ha añadido Flyway al proyecto y un script inicial `V1__init.sql` en `src/main/resources/db/migration` que crea las tablas `roles`, `usuarios` y `usuario_roles`.
+- Por defecto, en el perfil `cloud` Flyway está habilitado y aplicará las migraciones al arrancar la app. Para desactivarlo temporalmente, exporta `SPRING_FLYWAY_ENABLED=false` o edita la variable en la plataforma.
+
 Comprobaciones
 - Una vez arrancada la app con perfil `cloud`, comprueba la conexión:
 

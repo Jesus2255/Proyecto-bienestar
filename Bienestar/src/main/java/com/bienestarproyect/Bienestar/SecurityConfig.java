@@ -20,7 +20,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        // WARNING: NoOpPasswordEncoder allows plain-text passwords and MUST NOT be used in production.
+        return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
@@ -53,12 +54,14 @@ public class SecurityConfig {
               .loginPage("/login")
               .permitAll()
           )
-          .httpBasic()
-          .and()
           .logout(logout -> logout.permitAll());
 
-        // H2 console
-        http.csrf(csrf -> csrf.ignoringRequestMatchers(request -> request.getRequestURI().startsWith("/h2-console")));
+        // H2 console and REST API endpoints: disable CSRF for these request paths so API clients (Postman/Swagger) can POST
+        // NOTE: Disabling CSRF for API endpoints is acceptable for stateless API clients but evaluate for your threat model.
+        http.csrf(csrf -> csrf.ignoringRequestMatchers(request -> {
+            String uri = request.getRequestURI();
+            return uri.startsWith("/h2-console") || uri.startsWith("/api/");
+        }));
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
