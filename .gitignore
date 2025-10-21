@@ -1,0 +1,24 @@
+# Root .gitignore for Proyecto-bienestar
+# Java / Maven
+/target/
+/bin/
+/*.log
+
+# IntelliJ / VSCode
+.idea/
+.vscode/
+
+# Environment files
+.env
+.env.*
+
+# OS files
+Thumbs.db
+Desktop.ini
+
+# Generated UML / diagrams (if any)
+*.png
+*.svg
+
+# tmp and build artifacts
+/tmp_exploded/
