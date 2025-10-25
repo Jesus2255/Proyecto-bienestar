@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual Técnico - Sistema de Gestión de Bienestar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        nav {
+            background: #f8f9fa;
+            padding: 20px;
+            border-bottom: 3px solid #667eea;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        nav a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        h3 {
+            color: #764ba2;
+            font-size: 1.5em;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h4 {
+            color: #555;
+            font-size: 1.2em;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            margin-bottom: 15px;
+            text-align: justify;
+        }
+
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 20px;
+        }
+
+        li {
+            margin-bottom: 10px;
+        }
+
+        code {
+            background: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #d63384;
+        }
+
+        pre {
+            background: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            line-height: 1.5;
+        }
+
+        .info-box {
+            background: #e7f3ff;
+            border-left: 4px solid #2196F3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .danger-box {
+            background: #f8d7da;
+            border-left: 4px solid #dc3545;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background: #d4edda;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        table th {
+            background: #667eea;
+            color: white;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        table td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        table tr:hover {
+            background: #f5f5f5;
+        }
+
+        .diagram {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .diagram pre {
+            display: inline-block;
+            text-align: left;
+            background: white;
+            color: #333;
+            border: 2px solid #667eea;
+        }
+
+        footer {
+            background: #2d2d2d;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .badge-primary { background: #667eea; color: white; }
+        .badge-success { background: #28a745; color: white; }
+        .badge-warning { background: #ffc107; color: #333; }
+        .badge-danger { background: #dc3545; color: white; }
+        .badge-info { background: #17a2b8; color: white; }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            nav ul { flex-direction: column; }
+            .content { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📘 Manual Técnico</h1>
+            <p>Sistema de Gestión de Bienestar - v1.0.0</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Documentación para desarrolladores y administradores de sistemas</p>
+        </header>
+
+        <nav>
+            <ul>
+                <li><a href="#introduccion">Introducción</a></li>
+                <li><a href="#arquitectura">Arquitectura</a></li>
+                <li><a href="#tecnologias">Tecnologías</a></li>
+                <li><a href="#instalacion">Instalación</a></li>
+                <li><a href="#configuracion">Configuración</a></li>
+                <li><a href="#api">API REST</a></li>
+                <li><a href="#seguridad">Seguridad</a></li>
+                <li><a href="#base-datos">Base de Datos</a></li>
+                <li><a href="#patrones">Patrones de Diseño</a></li>
+                <li><a href="#mantenimiento">Mantenimiento</a></li>
+            </ul>
+        </nav>
+
+        <div class="content">
+            <!-- INTRODUCCIÓN -->
+            <section id="introduccion">
+                <h2>1. Introducción</h2>
+                
+                <h3>1.1 Propósito del Sistema</h3>
+                <p>
+                    El <strong>Sistema de Gestión de Bienestar</strong> es una aplicación empresarial desarrollada para 
+                    gestionar servicios de bienestar, clientes, citas y facturación. Está compuesto por un backend 
+                    REST API en Spring Boot y una aplicación móvil Android en Kotlin con Jetpack Compose.
+                </p>
+
+                <h3>1.2 Alcance</h3>
+                <p>Este manual técnico cubre:</p>
+                <ul>
+                    <li>Arquitectura del sistema backend y frontend móvil</li>
+                    <li>Tecnologías y frameworks utilizados</li>
+                    <li>Instalación y configuración del entorno de desarrollo</li>
+                    <li>Documentación de la API REST</li>
+                    <li>Modelo de datos y base de datos</li>
+                    <li>Implementación de seguridad y autenticación</li>
+                    <li>Patrones de diseño aplicados</li>
+                    <li>Procedimientos de mantenimiento y despliegue</li>
+                </ul>
+
+                <div class="info-box">
+                    <strong>ℹ️ Nota:</strong> Este sistema fue desarrollado siguiendo las mejores prácticas de 
+                    desarrollo de software, incluyendo principios SOLID, patrones de diseño y arquitectura limpia.
+                </div>
+            </section>
+
+            <!-- ARQUITECTURA -->
+            <section id="arquitectura">
+                <h2>2. Arquitectura del Sistema</h2>
+
+                <h3>2.1 Arquitectura General</h3>
+                <p>El sistema sigue una arquitectura de <strong>Cliente-Servidor</strong> con los siguientes componentes:</p>
+
+                <div class="diagram">
+                    <pre>
+┌─────────────────────────────────────────────────────────────┐
+│                    APLICACIÓN ANDROID                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
+│  │  UI Layer    │  │  ViewModel   │  │  Repository  │      │
+│  │  (Compose)   │◄─┤   (State)    │◄─┤   (Future)   │      │
+│  └──────────────┘  └──────────────┘  └──────────────┘      │
+│         │                   │                   │            │
+│         └───────────────────┴───────────────────┘            │
+│                             │                                │
+│                    ┌────────▼────────┐                       │
+│                    │   ApiService    │                       │
+│                    │   (Retrofit)    │                       │
+│                    └────────┬────────┘                       │
+└─────────────────────────────┼─────────────────────────────┘
+                              │ HTTP/JSON
+                              │
+┌─────────────────────────────▼─────────────────────────────┐
+│                    BACKEND (Spring Boot)                   │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐    │
+│  │ Controllers  │  │   Services   │  │ Repositories │    │
+│  │  (REST API)  │─►│  (Business)  │─►│    (DAO)     │    │
+│  └──────────────┘  └──────────────┘  └──────┬───────┘    │
+│         │                                     │            │
+│  ┌──────▼──────────┐                         │            │
+│  │ SecurityConfig  │                         │            │
+│  │ (Auth/AuthZ)    │                         │            │
+│  └─────────────────┘                         │            │
+└──────────────────────────────────────────────┼───────────┘
+                                               │
+                              ┌────────────────▼────────────┐
+                              │  PostgreSQL Database        │
+                              │  (Supabase - Cloud)         │
+                              └─────────────────────────────┘
+                    </pre>
+                </div>
+
+                <h3>2.2 Arquitectura Backend (MVC + Capas)</h3>
+                <p>El backend implementa el patrón <strong>MVC (Model-View-Controller)</strong> con arquitectura en capas:</p>
+                
+                <table>
+                    <tr>
+                        <th>Capa</th>
+                        <th>Responsabilidad</th>
+                        <th>Componentes</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Presentation</strong></td>
+                        <td>Manejo de peticiones HTTP</td>
+                        <td>Controllers (@RestController)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Business</strong></td>
+                        <td>Lógica de negocio</td>
+                        <td>Services (@Service)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Persistence</strong></td>
+                        <td>Acceso a datos</td>
+                        <td>Repositories (@Repository)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Domain</strong></td>
+                        <td>Modelo de dominio</td>
+                        <td>Entities, DTOs</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Security</strong></td>
+                        <td>Autenticación/Autorización</td>
+                        <td>SecurityConfig, Filters</td>
+                    </tr>
+                </table>
+
+                <h3>2.3 Arquitectura Android (MVVM)</h3>
+                <p>La aplicación móvil sigue el patrón <strong>MVVM (Model-View-ViewModel)</strong>:</p>
+
+                <div class="diagram">
+                    <pre>
+┌─────────────────────────────────────────────┐
+│              UI Layer (View)                 │
+│  • LoginScreen, HomeScreen, etc.            │
+│  • Jetpack Compose                          │
+└────────────────┬────────────────────────────┘
+                 │ observes state
+                 │
+┌────────────────▼────────────────────────────┐
+│           ViewModel Layer                    │
+│  • LoginViewModel, ClientesViewModel        │
+│  • State management (mutableStateOf)        │
+│  • Business logic                           │
+└────────────────┬────────────────────────────┘
+                 │ calls API
+                 │
+┌────────────────▼────────────────────────────┐
+│          Data Layer (Model)                  │
+│  • ApiService (Retrofit)                    │
+│  • NetworkModule                            │
+│  • UserSession                              │
+└─────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </section>
+
+            <!-- TECNOLOGÍAS -->
+            <section id="tecnologias">
+                <h2>3. Tecnologías Utilizadas</h2>
+
+                <h3>3.1 Backend (Spring Boot)</h3>
+                <table>
+                    <tr>
+                        <th>Tecnología</th>
+                        <th>Versión</th>
+                        <th>Propósito</th>
+                    </tr>
+                    <tr>
+                        <td>Java</td>
+                        <td>17 LTS</td>
+                        <td>Lenguaje de programación</td>
+                    </tr>
+                    <tr>
+                        <td>Spring Boot</td>
+                        <td>3.5.6</td>
+                        <td>Framework principal</td>
+                    </tr>
+                    <tr>
+                        <td>Spring Security</td>
+                        <td>6.x</td>
+                        <td>Autenticación y autorización</td>
+                    </tr>
+                    <tr>
+                        <td>Spring Data JPA</td>
+                        <td>3.x</td>
+                        <td>ORM y acceso a datos</td>
+                    </tr>
+                    <tr>
+                        <td>Hibernate</td>
+                        <td>6.6.x</td>
+                        <td>Implementación JPA</td>
+                    </tr>
+                    <tr>
+                        <td>PostgreSQL</td>
+                        <td>17 (Supabase)</td>
+                        <td>Base de datos relacional</td>
+                    </tr>
+                    <tr>
+                        <td>Maven</td>
+                        <td>3.9.x</td>
+                        <td>Gestión de dependencias</td>
+                    </tr>
+                    <tr>
+                        <td>SpringDoc OpenAPI</td>
+                        <td>2.7.0</td>
+                        <td>Documentación API (Swagger)</td>
+                    </tr>
+                    <tr>
+                        <td>Jakarta Validation</td>
+                        <td>3.x</td>
+                        <td>Validación de datos</td>
+                    </tr>
+                </table>
+
+                <h3>3.2 Frontend (Android)</h3>
+                <table>
+                    <tr>
+                        <th>Tecnología</th>
+                        <th>Versión</th>
+                        <th>Propósito</th>
+                    </tr>
+                    <tr>
+                        <td>Kotlin</td>
+                        <td>1.9+</td>
+                        <td>Lenguaje de programación</td>
+                    </tr>
+                    <tr>
+                        <td>Jetpack Compose</td>
+                        <td>1.5+</td>
+                        <td>UI moderna y declarativa</td>
+                    </tr>
+                    <tr>
+                        <td>Material Design 3</td>
+                        <td>Latest</td>
+                        <td>Componentes UI</td>
+                    </tr>
+                    <tr>
+                        <td>Retrofit</td>
+                        <td>2.9.0</td>
+                        <td>Cliente HTTP</td>
+                    </tr>
+                    <tr>
+                        <td>OkHttp</td>
+                        <td>4.12.0</td>
+                        <td>Manejo de conexiones HTTP</td>
+                    </tr>
+                    <tr>
+                        <td>Gson</td>
+                        <td>2.10.1</td>
+                        <td>Serialización JSON</td>
+                    </tr>
+                    <tr>
+                        <td>Navigation Compose</td>
+                        <td>2.7.7</td>
+                        <td>Navegación entre pantallas</td>
+                    </tr>
+                    <tr>
+                        <td>Coroutines</td>
+                        <td>1.7+</td>
+                        <td>Programación asíncrona</td>
+                    </tr>
+                </table>
+
+                <div class="success-box">
+                    <strong>✅ Ventajas de las tecnologías elegidas:</strong>
+                    <ul>
+                        <li><strong>Spring Boot:</strong> Configuración automática, ecosistema robusto</li>
+                        <li><strong>Jetpack Compose:</strong> UI declarativa, menos código boilerplate</li>
+                        <li><strong>PostgreSQL:</strong> Base de datos confiable, soporte JSON, escalable</li>
+                        <li><strong>Retrofit:</strong> Cliente HTTP type-safe, fácil integración</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- INSTALACIÓN -->
+            <section id="instalacion">
+                <h2>4. Instalación y Configuración</h2>
+
+                <h3>4.1 Requisitos Previos</h3>
+                
+                <h4>Backend:</h4>
+                <ul>
+                    <li>JDK 17 o superior</li>
+                    <li>Maven 3.8+</li>
+                    <li>PostgreSQL 12+ o cuenta en Supabase</li>
+                    <li>IDE: IntelliJ IDEA / VS Code</li>
+                </ul>
+
+                <h4>Android:</h4>
+                <ul>
+                    <li>Android Studio Hedgehog o superior</li>
+                    <li>SDK Android 24+ (Android 7.0)</li>
+                    <li>Gradle 8.0+</li>
+                    <li>Emulador Android o dispositivo físico</li>
+                </ul>
+
+                <h3>4.2 Instalación Backend</h3>
+
+                <h4>Paso 1: Clonar el repositorio</h4>
+                <pre>git clone https://github.com/Jesus2255/Proyecto-bienestar.git
+cd Proyecto-bienestar/Bienestar</pre>
+
+                <h4>Paso 2: Configurar base de datos</h4>
+                <p>Crear archivo <code>config/application-local.properties</code>:</p>
+                <pre>spring.datasource.url=jdbc:postgresql://HOST:5432/DATABASE
+spring.datasource.username=TU_USUARIO
+spring.datasource.password=TU_PASSWORD
+spring.jpa.hibernate.ddl-auto=update</pre>
+
+                <div class="warning-box">
+                    <strong>⚠️ Importante:</strong> NO subir credenciales a Git. El archivo 
+                    <code>application-local.properties</code> está en <code>.gitignore</code>.
+                </div>
+
+                <h4>Paso 3: Compilar y ejecutar</h4>
+                <pre>mvn clean package -DskipTests
+java -jar target/Bienestar-0.0.1-SNAPSHOT.jar --spring.profiles.active=local</pre>
+
+                <p>O usar el script:</p>
+                <pre>run-local.cmd</pre>
+
+                <h4>Paso 4: Verificar instalación</h4>
+                <p>Acceder a:</p>
+                <ul>
+                    <li><strong>API:</strong> <code>http://localhost:8080</code></li>
+                    <li><strong>Swagger UI:</strong> <code>http://localhost:8080/swagger-ui.html</code></li>
+                    <li><strong>Health Check:</strong> <code>http://localhost:8080/actuator/health</code></li>
+                </ul>
+
+                <h3>4.3 Instalación Android</h3>
+
+                <h4>Paso 1: Abrir proyecto en Android Studio</h4>
+                <pre>File → Open → Seleccionar carpeta "Bienestar app"</pre>
+
+                <h4>Paso 2: Sincronizar Gradle</h4>
+                <p>Android Studio sincronizará automáticamente las dependencias.</p>
+
+                <h4>Paso 3: Configurar URL del backend</h4>
+                <p>En <code>NetworkModule.kt</code>:</p>
+                <pre>private const val BASE_URL = "http://10.0.2.2:8080/"  // Emulador
+// private const val BASE_URL = "http://TU_IP:8080/"  // Dispositivo físico</pre>
+
+                <div class="info-box">
+                    <strong>ℹ️ Nota:</strong> <code>10.0.2.2</code> es la IP del host desde el emulador Android.
+                </div>
+
+                <h4>Paso 4: Ejecutar aplicación</h4>
+                <ul>
+                    <li>Conectar dispositivo o iniciar emulador</li>
+                    <li>Clic en <strong>Run</strong> (▶️)</li>
+                    <li>Credenciales de prueba: <code>admin/1234</code> o <code>client/1234</code></li>
+                </ul>
+            </section>
+
+            <!-- CONFIGURACIÓN -->
+            <section id="configuracion">
+                <h2>5. Configuración Avanzada</h2>
+
+                <h3>5.1 Perfiles de Spring</h3>
+                <p>El sistema soporta múltiples perfiles:</p>
+
+                <table>
+                    <tr>
+                        <th>Perfil</th>
+                        <th>Archivo</th>
+                        <th>Uso</th>
+                    </tr>
+                    <tr>
+                        <td><code>local</code></td>
+                        <td>application-local.properties</td>
+                        <td>Desarrollo local</td>
+                    </tr>
+                    <tr>
+                        <td><code>dev</code></td>
+                        <td>application-dev.properties</td>
+                        <td>Servidor de desarrollo</td>
+                    </tr>
+                    <tr>
+                        <td><code>prod</code></td>
+                        <td>application-prod.properties</td>
+                        <td>Producción</td>
+                    </tr>
+                    <tr>
+                        <td><code>cloud</code></td>
+                        <td>application-cloud.properties</td>
+                        <td>Despliegue en nube</td>
+                    </tr>
+                </table>
+
+                <h4>Activar perfil:</h4>
+                <pre>java -jar app.jar --spring.profiles.active=prod</pre>
+
+                <h3>5.2 Configuración de Seguridad</h3>
+                <p>En <code>SecurityConfig.java</code>:</p>
+
+                <pre>@Bean
+public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    http.authorizeHttpRequests(auth -> auth
+        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+        .requestMatchers("/api/**").hasAnyRole("ADMIN","RECEPTIONIST","CLIENT")
+        .anyRequest().authenticated()
+    );
+    // ... configuración adicional
+}</pre>
+
+                <h3>5.3 Configuración de CORS (si es necesario)</h3>
+                <pre>@Configuration
+public class WebConfig implements WebMvcConfigurer {
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/api/**")
+            .allowedOrigins("http://localhost:3000")
+            .allowedMethods("GET", "POST", "PUT", "DELETE");
+    }
+}</pre>
+
+                <div class="danger-box">
+                    <strong>🔒 CRÍTICO - Seguridad en Producción:</strong>
+                    <ul>
+                        <li>Cambiar <code>NoOpPasswordEncoder</code> por <code>BCryptPasswordEncoder</code></li>
+                        <li>Usar HTTPS en producción</li>
+                        <li>Configurar CORS restrictivo</li>
+                        <li>Habilitar rate limiting</li>
+                        <li>Implementar refresh tokens</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- API REST -->
+            <section id="api">
+                <h2>6. API REST - Documentación</h2>
+
+                <h3>6.1 Endpoints de Autenticación</h3>
+
+                <h4>POST /login</h4>
+                <p><strong>Descripción:</strong> Autenticar usuario y crear sesión.</p>
+                <pre>POST /login
+Content-Type: application/x-www-form-urlencoded
+
+username=admin&password=1234
+
+Response (200 OK):
+{
+  "message": "Login successful",
+  "username": "admin"
+}</pre>
+
+                <h4>GET /api/auth/user-info</h4>
+                <p><strong>Descripción:</strong> Obtener información del usuario autenticado.</p>
+                <pre>GET /api/auth/user-info
+Cookie: JSESSIONID=xxxxx
+
+Response (200 OK):
+{
+  "success": true,
+  "username": "admin",
+  "role": "ROLE_ADMIN"
+}</pre>
+
+                <h4>POST /logout</h4>
+                <p><strong>Descripción:</strong> Cerrar sesión y destruir cookie.</p>
+                <pre>POST /logout
+
+Response (200 OK):
+{
+  "message": "Logout successful"
+}</pre>
+
+                <h3>6.2 Endpoints de Clientes</h3>
+
+                <table>
+                    <tr>
+                        <th>Método</th>
+                        <th>Endpoint</th>
+                        <th>Descripción</th>
+                        <th>Rol Requerido</th>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-success">GET</span></td>
+                        <td>/api/clientes</td>
+                        <td>Listar todos los clientes</td>
+                        <td>ADMIN, RECEPTIONIST, CLIENT</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-success">GET</span></td>
+                        <td>/api/clientes/{id}</td>
+                        <td>Obtener cliente por ID</td>
+                        <td>ADMIN, RECEPTIONIST, CLIENT</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-info">POST</span></td>
+                        <td>/api/clientes</td>
+                        <td>Crear nuevo cliente</td>
+                        <td>ADMIN, RECEPTIONIST</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">PUT</span></td>
+                        <td>/api/clientes/{id}</td>
+                        <td>Actualizar cliente</td>
+                        <td>ADMIN, RECEPTIONIST</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-danger">DELETE</span></td>
+                        <td>/api/clientes/{id}</td>
+                        <td>Eliminar cliente</td>
+                        <td>ADMIN</td>
+                    </tr>
+                </table>
+
+                <h4>Ejemplo: Crear Cliente</h4>
+                <pre>POST /api/clientes
+Content-Type: application/json
+
+{
+  "nombre": "Juan Pérez",
+  "email": "juan@example.com",
+  "telefono": "555-1234"
+}
+
+Response (200 OK):
+{
+  "id": 1,
+  "nombre": "Juan Pérez",
+  "email": "juan@example.com",
+  "telefono": "555-1234"
+}</pre>
+
+                <h3>6.3 Endpoints de Servicios</h3>
+                <p>Similar estructura a clientes:</p>
+                <ul>
+                    <li><code>GET /api/servicios</code> - Listar servicios</li>
+                    <li><code>POST /api/servicios</code> - Crear servicio</li>
+                    <li><code>PUT /api/servicios/{id}</code> - Actualizar</li>
+                    <li><code>DELETE /api/servicios/{id}</code> - Eliminar</li>
+                </ul>
+
+                <h3>6.4 Endpoints de Citas</h3>
+                <ul>
+                    <li><code>POST /api/citas</code> - Agendar cita</li>
+                    <li><code>PUT /api/citas/{id}</code> - Actualizar cita</li>
+                    <li><code>DELETE /api/citas/{id}</code> - Cancelar cita</li>
+                </ul>
+
+                <h4>Ejemplo: Agendar Cita</h4>
+                <pre>POST /api/citas
+Content-Type: application/json
+
+{
+  "clienteId": 1,
+  "servicioId": 2,
+  "fechaHora": "2025-11-01T10:00:00"
+}
+
+Response (200 OK):
+{
+  "id": 5,
+  "cliente": { "id": 1, "nombre": "Juan Pérez" },
+  "servicio": { "id": 2, "nombre": "Masaje" },
+  "fechaHora": "2025-11-01T10:00:00",
+  "estado": "AGENDADA"
+}</pre>
+
+                <div class="info-box">
+                    <strong>📖 Documentación interactiva:</strong> Acceder a 
+                    <code>http://localhost:8080/swagger-ui.html</code> para probar todos los endpoints.
+                </div>
+            </section>
+
+            <!-- SEGURIDAD -->
+            <section id="seguridad">
+                <h2>7. Seguridad</h2>
+
+                <h3>7.1 Autenticación</h3>
+                <p>El sistema utiliza <strong>Spring Security</strong> con autenticación basada en sesión:</p>
+                
+                <ul>
+                    <li><strong>Mecanismo:</strong> Form-based authentication</li>
+                    <li><strong>Almacenamiento:</strong> Cookie JSESSIONID</li>
+                    <li><strong>Validación:</strong> UserDetailsService personalizado</li>
+                    <li><strong>Password:</strong> NoOpPasswordEncoder (⚠️ solo desarrollo)</li>
+                </ul>
+
+                <div class="diagram">
+                    <pre>
+┌─────────┐         ┌────────────┐         ┌──────────────┐
+│ Cliente │─ POST ─►│   /login   │─ Valid ─►│  Create      │
+│         │ creds   │            │         │  Session     │
+└─────────┘         └────────────┘         └──────┬───────┘
+     │                                            │
+     │◄──────────────────────────────────────────┘
+     │              Set-Cookie: JSESSIONID
+     │
+     │              ┌────────────┐
+     └─── GET ─────►│  /api/**   │
+       + Cookie     │            │
+                    └────────────┘
+                    </pre>
+                </div>
+
+                <h3>7.2 Autorización (RBAC)</h3>
+                <p>Control de acceso basado en roles:</p>
+
+                <table>
+                    <tr>
+                        <th>Rol</th>
+                        <th>Permisos</th>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-danger">ADMIN</span></td>
+                        <td>Acceso completo: CRUD de clientes, servicios, citas, facturas. 
+                            Gestión de usuarios.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-warning">RECEPTIONIST</span></td>
+                        <td>Gestión de clientes y citas. Sin acceso a facturas ni configuración.</td>
+                    </tr>
+                    <tr>
+                        <td><span class="badge badge-info">CLIENT</span></td>
+                        <td>Ver sus propias citas y servicios. Sin permisos de escritura.</td>
+                    </tr>
+                </table>
+
+                <h3>7.3 Validación de Datos</h3>
+                <p>Se implementa validación en múltiples niveles:</p>
+
+                <h4>1. Validación en DTOs (Bean Validation):</h4>
+                <pre>public class ClienteDTO {
+    @NotBlank(message = "Nombre obligatorio")
+    private String nombre;
+
+    @NotBlank(message = "Email obligatorio")
+    @Email(message = "Email inválido")
+    private String email;
+
+    @NotBlank(message = "Teléfono obligatorio")
+    private String telefono;
+}</pre>
+
+                <h4>2. Validación en Controllers:</h4>
+                <pre>@PostMapping
+public Cliente crear(@Valid @RequestBody ClienteDTO dto) {
+    // @Valid activa las validaciones del DTO
+    return service.guardar(DTOMapper.toEntity(dto));
+}</pre>
+
+                <h4>3. Manejo de errores centralizado:</h4>
+                <pre>@ControllerAdvice
+public class ValidationExceptionHandler {
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(...) {
+        Map<String, String> errors = new HashMap<>();
+        for (FieldError fe : ex.getBindingResult().getFieldErrors()) {
+            errors.put(fe.getField(), fe.getDefaultMessage());
+        }
+        return ResponseEntity.badRequest().body(errors);
+    }
+}</pre>
+
+                <h3>7.4 Protección CSRF</h3>
+                <p>CSRF está <strong>deshabilitado selectivamente</strong> para endpoints API:</p>
+                <pre>http.csrf(csrf -> csrf.ignoringRequestMatchers(request -> {
+    String uri = request.getRequestURI();
+    return uri.startsWith("/api/") || uri.equals("/login");
+}));</pre>
+
+                <div class="warning-box">
+                    <strong>⚠️ Justificación:</strong> Los clientes REST (como Android) no usan cookies de manera 
+                    tradicional, por lo que CSRF no es necesario. En navegadores, CSRF permanece habilitado.
+                </div>
+            </section>
+
+            <!-- BASE DE DATOS -->
+            <section id="base-datos">
+                <h2>8. Base de Datos</h2>
+
+                <h3>8.1 Modelo de Datos (ER)</h3>
+
+                <div class="diagram">
+                    <pre>
+┌─────────────────┐         ┌─────────────────┐
+│    USUARIOS     │         │      ROLES      │
+├─────────────────┤         ├─────────────────┤
+│ id (PK)         │         │ id (PK)         │
+│ username        │◄───────►│ name            │
+│ password        │   M:N   │                 │
+└─────────────────┘         └─────────────────┘
+
+┌─────────────────┐         ┌─────────────────┐
+│    CLIENTES     │         │    SERVICIOS    │
+├─────────────────┤         ├─────────────────┤
+│ id (PK)         │         │ id (PK)         │
+│ nombre          │         │ nombre          │
+│ email           │         │ descripcion     │
+│ telefono        │         │ precio          │
+└────────┬────────┘         └────────┬────────┘
+         │                           │
+         │      ┌─────────────────┐  │
+         │      │      CITAS      │  │
+         │      ├─────────────────┤  │
+         └─────►│ id (PK)         │◄─┘
+          1:N   │ cliente_id (FK) │ N:1
+                │ servicio_id (FK)│
+                │ fecha_hora      │
+                │ estado          │
+                └────────┬────────┘
+                         │
+                         │ 1:N
+                         │
+                ┌────────▼────────┐
+                │    FACTURAS     │
+                ├─────────────────┤
+                │ id (PK)         │
+                │ cliente_id (FK) │
+                │ total           │
+                │ descripcion     │
+                └─────────────────┘
+                    </pre>
+                </div>
+
+                <h3>8.2 Tablas Principales</h3>
+
+                <h4>usuarios</h4>
+                <pre>CREATE TABLE usuarios (
+    id BIGSERIAL PRIMARY KEY,
+    username VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL
+);</pre>
+
+                <h4>roles</h4>
+                <pre>CREATE TABLE roles (
+    id BIGSERIAL PRIMARY KEY,
+    name VARCHAR(50) NOT NULL UNIQUE
+);</pre>
+
+                <h4>usuario_roles (tabla intermedia)</h4>
+                <pre>CREATE TABLE usuario_roles (
+    usuario_id BIGINT REFERENCES usuarios(id),
+    role_id BIGINT REFERENCES roles(id),
+    PRIMARY KEY (usuario_id, role_id)
+);</pre>
+
+                <h4>clientes</h4>
+                <pre>CREATE TABLE clientes (
+    id BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(255),
+    email VARCHAR(255),
+    telefono VARCHAR(100)
+);</pre>
+
+                <h4>servicios</h4>
+                <pre>CREATE TABLE servicios (
+    id BIGSERIAL PRIMARY KEY,
+    nombre VARCHAR(255),
+    descripcion TEXT,
+    precio NUMERIC(12,2)
+);</pre>
+
+                <h4>citas</h4>
+                <pre>CREATE TABLE citas (
+    id BIGSERIAL PRIMARY KEY,
+    cliente_id BIGINT REFERENCES clientes(id) ON DELETE SET NULL,
+    servicio_id BIGINT REFERENCES servicios(id) ON DELETE SET NULL,
+    fecha_hora TIMESTAMP,
+    estado VARCHAR(50)
+);</pre>
+
+                <h4>facturas</h4>
+                <pre>CREATE TABLE facturas (
+    id BIGSERIAL PRIMARY KEY,
+    cliente_id BIGINT REFERENCES clientes(id) ON DELETE SET NULL,
+    total NUMERIC(12,2),
+    descripcion TEXT
+);</pre>
+
+                <h3>8.3 Datos de Prueba</h3>
+                <p>El sistema inicializa automáticamente con datos de prueba mediante <code>DataInitializer</code>:</p>
+
+                <table>
+                    <tr>
+                        <th>Usuario</th>
+                        <th>Contraseña</th>
+                        <th>Roles</th>
+                    </tr>
+                    <tr>
+                        <td>admin</td>
+                        <td>1234</td>
+                        <td>ADMIN, RECEPTIONIST</td>
+                    </tr>
+                    <tr>
+                        <td>client</td>
+                        <td>1234</td>
+                        <td>CLIENT</td>
+                    </tr>
+                </table>
+
+                <div class="info-box">
+                    <strong>ℹ️ Nota:</strong> Los datos de prueba se crean solo si no existen, permitiendo 
+                    reinicios sin pérdida de datos.
+                </div>
+            </section>
+
+            <!-- PATRONES DE DISEÑO -->
+            <section id="patrones">
+                <h2>9. Patrones de Diseño Implementados</h2>
+
+                <h3>9.1 DAO (Data Access Object)</h3>
+                <p>Abstracción del acceso a datos mediante Spring Data JPA:</p>
+                <pre>public interface ClienteRepository extends JpaRepository<Cliente, Long> {
+    // Hereda métodos: findAll(), findById(), save(), delete()
+}</pre>
+
+                <h3>9.2 Singleton</h3>
+                <p>Todos los beans de Spring son Singletons por defecto:</p>
+                <pre>@Service  // Singleton gestionado por Spring IoC
+public class ClienteService {
+    // Una sola instancia en toda la aplicación
+}</pre>
+
+                <h3>9.3 MVC (Model-View-Controller)</h3>
+                <ul>
+                    <li><strong>Model:</strong> Entidades JPA + DTOs</li>
+                    <li><strong>View:</strong> JSON (REST API) / Thymeleaf (Web)</li>
+                    <li><strong>Controller:</strong> @RestController para endpoints REST</li>
+                </ul>
+
+                <h3>9.4 Facade</h3>
+                <p>La capa de servicios actúa como Facade:</p>
+                <pre>@Service
+public class CitaService {
+    // Simplifica operaciones complejas del repositorio
+    public Cita agendar(Cita c) { return repo.save(c); }
+}</pre>
+
+                <h3>9.5 Dependency Injection</h3>
+                <p>Inyección de dependencias por constructor:</p>
+                <pre>@RestController
+public class ClienteController {
+    private final ClienteService service;
+    
+    public ClienteController(ClienteService service) {
+        this.service = service;  // Inyección automática
+    }
+}</pre>
+
+                <div class="success-box">
+                    <strong>✅ Beneficios:</strong>
+                    <ul>
+                        <li>Código desacoplado y testeable</li>
+                        <li>Fácil mantenimiento y extensión</li>
+                        <li>Cumplimiento de principios SOLID</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- MANTENIMIENTO -->
+            <section id="mantenimiento">
+                <h2>10. Mantenimiento y Despliegue</h2>
+
+                <h3>10.1 Logs</h3>
+                <p>Configurar nivel de logs en <code>application.properties</code>:</p>
+                <pre>logging.level.root=INFO
+logging.level.com.bienestarproyect=DEBUG
+logging.file.name=logs/app.log</pre>
+
+                <h3>10.2 Monitoreo</h3>
+                <p>Spring Boot Actuator proporciona endpoints de monitoreo:</p>
+                <ul>
+                    <li><code>/actuator/health</code> - Estado del sistema</li>
+                    <li><code>/actuator/metrics</code> - Métricas de rendimiento</li>
+                    <li><code>/actuator/info</code> - Información de la aplicación</li>
+                </ul>
+
+                <h3>10.3 Backup de Base de Datos</h3>
+                <pre>-- Exportar
+pg_dump -U usuario -h host -d database > backup.sql
+
+-- Importar
+psql -U usuario -h host -d database < backup.sql</pre>
+
+                <h3>10.4 Despliegue en Producción</h3>
+
+                <h4>Checklist antes de desplegar:</h4>
+                <ul>
+                    <li>✅ Cambiar <code>NoOpPasswordEncoder</code> por <code>BCryptPasswordEncoder</code></li>
+                    <li>✅ Configurar HTTPS con certificado SSL</li>
+                    <li>✅ Actualizar <code>application-prod.properties</code></li>
+                    <li>✅ Configurar variables de entorno para credenciales</li>
+                    <li>✅ Habilitar logs de auditoría</li>
+                    <li>✅ Configurar CORS restrictivo</li>
+                    <li>✅ Implementar rate limiting</li>
+                    <li>✅ Realizar pruebas de carga</li>
+                </ul>
+
+                <h4>Comando de despliegue:</h4>
+                <pre>mvn clean package -DskipTests
+java -jar target/Bienestar-0.0.1-SNAPSHOT.jar \
+    --spring.profiles.active=prod \
+    --server.port=8080</pre>
+
+                <h3>10.5 Docker (Opcional)</h3>
+                <pre># Dockerfile
+FROM eclipse-temurin:17-jdk-alpine
+COPY target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app.jar"]
+
+# Construir imagen
+docker build -t bienestar-app .
+
+# Ejecutar contenedor
+docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod bienestar-app</pre>
+
+                <div class="info-box">
+                    <strong>💡 Recomendación:</strong> Usar Docker Compose para gestionar backend + PostgreSQL + Nginx.
+                </div>
+            </section>
+
+        </div>
+
+        <footer>
+            <p><strong>Sistema de Gestión de Bienestar</strong></p>
+            <p>Manual Técnico v1.0.0 - Octubre 2025</p>
+            <p>Desarrollado con Spring Boot + Kotlin + Jetpack Compose</p>
+            <p style="margin-top: 10px; font-size: 0.9em;">
+                📧 Contacto: soporte@bienestar.com | 🌐 GitHub: Jesus2255/Proyecto-bienestar
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

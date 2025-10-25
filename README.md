@@ -1,19 +1,435 @@
-# Proyecto Bienestar
+# 🌿 Sistema de Gestión de Bienestar
 
-Resumen rápido
+<div align="center">
 
-Este README explica cómo compilar, ejecutar y verificar el endpoint OpenAPI (/v3/api-docs) después de corregir una incompatibilidad de dependencias (springdoc vs Spring Framework) que provocaba un `NoSuchMethodError` relacionado con `org.springframework.web.method.ControllerAdviceBean`.
+![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge&logo=java)
+![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-green?style=for-the-badge&logo=spring)
+![Kotlin](https://img.shields.io/badge/Kotlin-1.9+-purple?style=for-the-badge&logo=kotlin)
+![Android](https://img.shields.io/badge/Android-7.0+-blue?style=for-the-badge&logo=android)
+![License](https://img.shields.io/badge/License-MIT-yellow?style=for-the-badge)
 
-Contexto del problema
+**Aplicación empresarial para gestión de servicios de bienestar**  
+Backend REST API + Aplicación Móvil Android
 
-- Síntoma: Al abrir la UI de Swagger o solicitar `/v3/api-docs` la aplicación devolvía 500 y en los logs aparecía:
-  `java.lang.NoSuchMethodError: 'void org.springframework.web.method.ControllerAdviceBean.<init>(java.lang.Object)'`
-- Causa: incompatibilidad en tiempo de ejecución entre la versión de Spring Framework empaquetada (`spring-web` 6.2.11) y una versión de `springdoc` que referenciaba un constructor antiguo de `ControllerAdviceBean`.
-- Solución aplicada: se actualizó `springdoc-openapi-starter-webmvc-ui` a la versión `2.7.0` y se reempaquetó el `fat-jar`. Con esa versión ya no se produce el NoSuchMethodError y `/v3/api-docs` responde correctamente.
+[📖 Manual Técnico](docs/manual-tecnico.html) • [👥 Manual de Usuario](docs/manual-usuario.html) • [📋 Buenas Prácticas](INFORME_BUENAS_PRACTICAS.md)
 
-Qué cambié en el repositorio
+</div>
 
-- `pom.xml`: actualizada la dependencia a
+---
+
+## 📋 Tabla de Contenidos
+
+- [Descripción](#-descripción)
+- [Características](#-características)
+- [Tecnologías](#-tecnologías)
+- [Arquitectura](#-arquitectura)
+- [Instalación](#-instalación)
+- [Documentación](#-documentación)
+- [API REST](#-api-rest)
+- [Seguridad](#-seguridad)
+- [Patrones de Diseño](#-patrones-de-diseño)
+- [Licencia](#-licencia)
+
+---
+
+## 🎯 Descripción
+
+Sistema integral para gestión de servicios de bienestar que permite administrar clientes, servicios, citas y facturación. Compuesto por:
+
+- **Backend:** API REST desarrollada en Spring Boot 3.5.6 con Java 17
+- **Frontend Móvil:** Aplicación Android nativa con Kotlin y Jetpack Compose
+- **Base de Datos:** PostgreSQL 17 (Supabase)
+
+### Resumen Técnico (Nota de Versión)
+
+
+**Problema resuelto:** Incompatibilidad entre `springdoc-openapi` y Spring Framework 6.2.11 causaba `NoSuchMethodError` en `ControllerAdviceBean`. Se actualizó `springdoc-openapi-starter-webmvc-ui` a **2.7.0** y ahora `/v3/api-docs` y Swagger UI funcionan correctamente.
+
+---
+
+## ✨ Características
+
+### Backend (Spring Boot)
+- ✅ **API REST completa** con operaciones CRUD
+- ✅ **Autenticación y autorización** con Spring Security
+- ✅ **Control de acceso basado en roles** (RBAC): Admin, Recepcionista, Cliente
+- ✅ **Validación de datos** con Jakarta Validation
+- ✅ **Documentación automática** con Swagger/OpenAPI 3
+- ✅ **Persistencia** con JPA/Hibernate + PostgreSQL
+- ✅ **Manejo centralizado de excepciones**
+- ✅ **Compatibilidad con clientes móviles** (sin redirecciones)
+
+### Frontend Android
+- ✅ **UI moderna** con Jetpack Compose + Material Design 3
+- ✅ **Arquitectura MVVM** (Model-View-ViewModel)
+- ✅ **Gestión de estado** con StateFlow y Coroutines
+- ✅ **Networking** con Retrofit 2 + OkHttp
+- ✅ **Navegación** entre pantallas con Navigation Compose
+- ✅ **Validación de formularios** en tiempo real
+- ✅ **Manejo de sesiones** con UserSession singleton
+
+---
+
+## 🛠️ Tecnologías
+
+### Backend
+| Tecnología | Versión | Propósito |
+|------------|---------|-----------|
+| Java | 17 LTS | Lenguaje principal |
+| Spring Boot | 3.5.6 | Framework backend |
+| Spring Security | 6.x | Autenticación/Autorización |
+| Spring Data JPA | 3.x | ORM y persistencia |
+| PostgreSQL | 17 | Base de datos |
+| SpringDoc OpenAPI | 2.7.0 | Documentación API |
+| Maven | 3.9+ | Gestión de dependencias |
+
+### Frontend Android
+| Tecnología | Versión | Propósito |
+|------------|---------|-----------|
+| Kotlin | 1.9+ | Lenguaje principal |
+| Jetpack Compose | 1.5+ | UI declarativa |
+| Material 3 | Latest | Componentes UI |
+| Retrofit | 2.9.0 | Cliente HTTP |
+| OkHttp | 4.12.0 | Networking |
+| Navigation Compose | 2.7.7 | Navegación |
+| Coroutines | 1.7+ | Asincronía |
+
+---
+
+## 🏗️ Arquitectura
+
+### Arquitectura General
+
+```
+┌─────────────────┐      HTTP/JSON      ┌─────────────────┐
+│  Android App    │◄──────────────────►│  Spring Boot    │
+│  (MVVM)         │                     │  (Backend API)  │
+└─────────────────┘                     └────────┬────────┘
+                                                 │
+                                        ┌────────▼────────┐
+                                        │   PostgreSQL    │
+                                        │   (Supabase)    │
+                                        └─────────────────┘
+```
+
+### Backend (Capas)
+
+```
+┌──────────────────────────────────────────────┐
+│           Controllers (REST API)              │  ← Presentation
+├──────────────────────────────────────────────┤
+│              Services (Business)              │  ← Business Logic
+├──────────────────────────────────────────────┤
+│          Repositories (DAO Pattern)           │  ← Data Access
+├──────────────────────────────────────────────┤
+│         Entities + DTOs (Domain Model)        │  ← Domain
+└──────────────────────────────────────────────┘
+```
+
+### Android (MVVM)
+
+```
+┌──────────────┐     observes     ┌──────────────┐
+│  UI (Compose)│◄─────────────────│  ViewModel   │
+└──────────────┘                  └──────┬───────┘
+                                          │ calls
+                                  ┌───────▼───────┐
+                                  │  ApiService   │
+                                  │  (Retrofit)   │
+                                  └───────────────┘
+```
+
+---
+
+## 🚀 Instalación
+
+### Requisitos Previos
+
+**Backend:**
+- JDK 17 o superior
+- Maven 3.8+
+- PostgreSQL 12+ (o cuenta Supabase)
+
+**Android:**
+- Android Studio Hedgehog o superior
+- Android SDK 24+ (Android 7.0)
+- Dispositivo o emulador Android
+
+### Backend - Instalación Rápida
+
+1. **Clonar repositorio:**
+```bash
+git clone https://github.com/Jesus2255/Proyecto-bienestar.git
+cd Proyecto-bienestar/Bienestar
+```
+
+2. **Configurar base de datos:**
+
+Crear `config/application-local.properties`:
+```properties
+spring.datasource.url=jdbc:postgresql://HOST:5432/DATABASE
+spring.datasource.username=TU_USUARIO
+spring.datasource.password=TU_PASSWORD
+spring.jpa.hibernate.ddl-auto=update
+```
+
+3. **Compilar:**
+```bash
+mvn clean package -DskipTests
+```
+
+4. **Ejecutar:**
+```bash
+java -jar target/Bienestar-0.0.1-SNAPSHOT.jar --spring.profiles.active=local
+```
+
+O usar el script proporcionado:
+```bash
+run-local.cmd
+```
+
+5. **Verificar:**
+- API: http://localhost:8080
+- Swagger: http://localhost:8080/swagger-ui.html
+- OpenAPI JSON: http://localhost:8080/v3/api-docs
+
+### Android - Instalación
+
+1. **Abrir en Android Studio:**
+```
+File → Open → Seleccionar carpeta "Bienestar app"
+```
+
+2. **Configurar URL del backend:**
+
+En `NetworkModule.kt`:
+```kotlin
+private const val BASE_URL = "http://10.0.2.2:8080/"  // Emulador
+// private const val BASE_URL = "http://TU_IP:8080/"  // Dispositivo físico
+```
+
+3. **Ejecutar:**
+- Conectar dispositivo o iniciar emulador
+- Clic en Run (▶️)
+- Credenciales de prueba: `admin/1234` o `client/1234`
+
+---
+
+## 📚 Documentación
+
+### Manuales Disponibles
+
+| Documento | Descripción | Enlace |
+|-----------|-------------|--------|
+| **Manual Técnico** | Arquitectura, instalación, configuración, API, base de datos, patrones de diseño | [📖 Ver HTML](docs/manual-tecnico.html) |
+| **Manual de Usuario** | Guía de uso de la aplicación móvil con capturas de pantalla | [👥 Ver HTML](docs/manual-usuario.html) |
+| **Informe de Buenas Prácticas** | Análisis de POO, SOLID, patrones de diseño y seguridad | [📋 Ver Markdown](INFORME_BUENAS_PRACTICAS.md) |
+
+### Diagramas
+
+**Modelo de Datos:**
+```
+┌─────────────┐     M:N     ┌─────────────┐
+│  USUARIOS   │◄───────────►│    ROLES    │
+└──────┬──────┘             └─────────────┘
+       │
+       │ 1:N
+       │
+┌──────▼──────┐             ┌─────────────┐
+│  CLIENTES   │             │  SERVICIOS  │
+└──────┬──────┘             └──────┬──────┘
+       │                           │
+       │ 1:N                  N:1  │
+       │      ┌─────────────┐      │
+       └─────►│    CITAS    │◄─────┘
+              └──────┬──────┘
+                     │ 1:N
+              ┌──────▼──────┐
+              │  FACTURAS   │
+              └─────────────┘
+```
+
+---
+
+## 🔌 API REST
+
+### Autenticación
+
+**POST** `/login` - Iniciar sesión
+```bash
+curl -X POST http://localhost:8080/login \
+  -d "username=admin&password=1234"
+```
+
+**GET** `/api/auth/user-info` - Obtener información del usuario
+```bash
+curl http://localhost:8080/api/auth/user-info \
+  -b cookies.txt
+```
+
+### Clientes
+
+| Método | Endpoint | Descripción | Rol |
+|--------|----------|-------------|-----|
+| GET | `/api/clientes` | Listar clientes | Todos |
+| GET | `/api/clientes/{id}` | Obtener cliente | Todos |
+| POST | `/api/clientes` | Crear cliente | Admin, Receptionist |
+| PUT | `/api/clientes/{id}` | Actualizar cliente | Admin, Receptionist |
+| DELETE | `/api/clientes/{id}` | Eliminar cliente | Admin |
+
+**Ejemplo - Crear cliente:**
+```bash
+curl -X POST http://localhost:8080/api/clientes \
+  -H "Content-Type: application/json" \
+  -d '{
+    "nombre": "Juan Pérez",
+    "email": "juan@example.com",
+    "telefono": "555-1234"
+  }'
+```
+
+### Servicios
+
+- `GET /api/servicios` - Listar servicios
+- `POST /api/servicios` - Crear servicio (Admin)
+- `PUT /api/servicios/{id}` - Actualizar servicio (Admin)
+- `DELETE /api/servicios/{id}` - Eliminar servicio (Admin)
+
+### Citas
+
+- `POST /api/citas` - Agendar cita
+- `PUT /api/citas/{id}` - Actualizar cita
+- `DELETE /api/citas/{id}` - Cancelar cita
+
+📖 **Documentación completa:** http://localhost:8080/swagger-ui.html
+
+---
+
+## 🔐 Seguridad
+
+### Autenticación
+- **Mecanismo:** Form-based authentication con Spring Security
+- **Almacenamiento:** Cookie JSESSIONID (session-based)
+- **Validación:** `UserDetailsService` personalizado
+
+### Autorización (RBAC)
+
+| Rol | Permisos |
+|-----|----------|
+| **ADMIN** | Acceso completo: CRUD de clientes, servicios, citas, facturas, usuarios |
+| **RECEPTIONIST** | Gestión de clientes y citas (sin eliminar) |
+| **CLIENT** | Solo lectura: ver servicios y sus propias citas |
+
+### Validación de Datos
+
+Validación en múltiples niveles:
+1. **DTOs:** `@NotBlank`, `@Email`, `@NotNull`
+2. **Controllers:** `@Valid` activa validaciones
+3. **Exception Handler:** `@ControllerAdvice` centraliza errores
+
+```java
+public class ClienteDTO {
+    @NotBlank(message = "Nombre obligatorio")
+    private String nombre;
+
+    @NotBlank @Email(message = "Email inválido")
+    private String email;
+}
+```
+
+### ⚠️ Seguridad en Producción
+
+```java
+// ❌ Desarrollo (actual)
+@Bean
+public PasswordEncoder passwordEncoder() {
+    return NoOpPasswordEncoder.getInstance();  // SOLO DESARROLLO
+}
+
+// ✅ Producción (REQUERIDO)
+@Bean
+public PasswordEncoder passwordEncoder() {
+    return new BCryptPasswordEncoder(12);
+}
+```
+
+---
+
+## 🎨 Patrones de Diseño
+
+### Implementados
+
+| Patrón | Ubicación | Descripción |
+|--------|-----------|-------------|
+| **DAO** | `*Repository` | Abstracción de acceso a datos con Spring Data JPA |
+| **Singleton** | `@Service`, `@Component` | Instancia única gestionada por Spring IoC |
+| **MVC** | Arquitectura general | Model (Entidades), View (JSON), Controller (REST) |
+| **Facade** | Capa de servicios | Simplifica operaciones complejas |
+| **Dependency Injection** | Constructores | Inyección automática de dependencias |
+| **MVVM** | Android | Model-View-ViewModel en la app móvil |
+
+### Principios SOLID
+
+✅ **S** - Single Responsibility: Cada clase tiene una responsabilidad única  
+✅ **O** - Open/Closed: Extensible mediante `@ExceptionHandler`, DTOs  
+✅ **L** - Liskov Substitution: Interfaces intercambiables  
+✅ **I** - Interface Segregation: Interfaces específicas  
+✅ **D** - Dependency Inversion: Dependencia de abstracciones  
+
+📋 **Análisis completo:** [INFORME_BUENAS_PRACTICAS.md](INFORME_BUENAS_PRACTICAS.md)
+
+---
+
+## 🧪 Testing
+
+```bash
+# Backend - Ejecutar tests
+mvn test
+
+# Backend - Ver cobertura
+mvn jacoco:report
+
+# Android - Ejecutar tests unitarios
+./gradlew test
+
+# Android - Tests instrumentados
+./gradlew connectedAndroidTest
+```
+
+---
+
+## 📦 Despliegue
+
+### Compilar para Producción
+
+```bash
+mvn clean package -DskipTests
+```
+
+### Docker (Opcional)
+
+```dockerfile
+FROM eclipse-temurin:17-jdk-alpine
+COPY target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app.jar"]
+```
+
+```bash
+docker build -t bienestar-app .
+docker run -p 8080:8080 -e SPRING_PROFILES_ACTIVE=prod bienestar-app
+```
+
+---
+
+## 🐛 Troubleshooting
+
+### Error: NoSuchMethodError (ControllerAdviceBean)
+
+
+**Causa:** Incompatibilidad entre `springdoc-openapi` y Spring Framework 6.2.11
+
+**Solución:** Actualizar en `pom.xml`:
 
 ```xml
 <dependency>
@@ -23,81 +439,74 @@ Qué cambié en el repositorio
 </dependency>
 ```
 
-- Se añadieron mejoras de diagnóstico temporal en el código (beans que imprimen dónde se cargan clases clave y un `ControllerAdvice` que registra stacktraces completos). Estos archivos son útiles en desarrollo para detectar conflictos de classpath.
+### Error: Unable to rename JAR
 
-Requisitos
-
-- Java 17 (el proyecto está configurado con `<java.version>17</java.version>` en el `pom.xml`).
-- Maven 3.x
-
-Cómo compilar (Windows, cmd.exe)
-
-Abre un cmd en la raíz del proyecto (donde está la carpeta `Bienestar`) y ejecuta:
-
-```cmd
-cd "C:\Users\estiv\Documents\Visual Studio 2022\java\Proyecto-bienestar\Bienestar"
-mvn -DskipTests clean package
-```
-
-Si aparece un error al repackage como "Unable to rename ..." o similar, asegúrate de que no haya procesos `java` ejecutando el JAR anterior y mátalos:
-
-```cmd
-wmic process where "CommandLine like '%Bienestar-0.0.1-SNAPSHOT.jar%'" get ProcessId,CommandLine /format:list
+**Solución:** Matar proceso Java que está usando el JAR:
+```bash
+wmic process where "CommandLine like '%Bienestar%'" get ProcessId
 taskkill /PID <PID> /F
 ```
 
-Cómo ejecutar
+### App Android no conecta
 
-```cmd
-java -jar target\Bienestar-0.0.1-SNAPSHOT.jar
-```
+**Solución:**
+1. Verificar que el backend esté corriendo: `http://localhost:8080/actuator/health`
+2. Emulador: usar `http://10.0.2.2:8080/`
+3. Dispositivo físico: usar IP de tu PC (ej: `http://192.168.1.100:8080/`)
 
-Alternativamente (desde Maven):
+---
 
-```cmd
-mvn spring-boot:run
-```
+## 📊 Métricas del Proyecto
 
-Probar OpenAPI / Swagger
+- **Líneas de código backend:** ~3,500
+- **Líneas de código Android:** ~2,000
+- **Endpoints REST:** 15+
+- **Entidades JPA:** 6
+- **Pantallas Android:** 5
+- **Cobertura de tests:** En desarrollo
 
-- OpenAPI JSON:
+---
 
-```cmd
-curl http://localhost:8080/v3/api-docs
-```
+## 👥 Contribuir
 
-- Swagger UI: abrir en el navegador
+1. Fork el proyecto
+2. Crea una rama (`git checkout -b feature/AmazingFeature`)
+3. Commit cambios (`git commit -m 'Add: AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
 
-```
-http://localhost:8080/swagger-ui/index.html
-```
+---
 
-Comprobaciones útiles (diagnóstico)
+## 📝 Licencia
 
-- Ver dependencias Spring y springdoc resueltas:
+Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detalles.
 
-```cmd
-mvn -f Bienestar\pom.xml dependency:tree -Dincludes=org.springframework,org.springdoc
-```
+---
 
-- Ver qué jars están empaquetados en el fat-jar (útil para verificar versiones en runtime):
+## 📧 Contacto
 
-```cmd
-jar tf target\Bienestar-0.0.1-SNAPSHOT.jar | findstr /I "springdoc-openapi spring-web spring-webmvc"
-```
+- **GitHub:** [@Jesus2255](https://github.com/Jesus2255)
+- **Proyecto:** [Proyecto-bienestar](https://github.com/Jesus2255/Proyecto-bienestar)
+- **Email:** soporte@bienestar.com
 
-- Desensamblar una clase concreta para comprobar referencias (avanzado):
+---
 
-```cmd
-javap -classpath "target\BOOT-INF\lib\springdoc-openapi-starter-common-2.7.0.jar" -v org.springdoc.core.service.GenericResponseService
-```
+## 🙏 Agradecimientos
 
-Buenas prácticas y recomendaciones
+- Spring Boot Team por el excelente framework
+- Google por Jetpack Compose y Material Design
+- Comunidad open-source
 
-- Fijar versiones críticas en `dependencyManagement` para evitar regresiones cuando dependencias transitivas introduzcan versiones no deseadas.
-- Antes de reempaquetar el `fat-jar`, parar cualquier proceso que esté ejecutando el jar para que el plugin de Spring Boot pueda renombrar/reemplazar ficheros.
-- Cuando aparezca un `NoSuchMethodError` o `NoClassDefFoundError`, usar estos pasos:
-  1. Identificar el nombre de la clase/método que falta en el stacktrace.
+---
+
+<div align="center">
+
+**⭐ Si este proyecto te fue útil, considera darle una estrella en GitHub ⭐**
+
+Hecho con ❤️ usando Spring Boot + Kotlin + Jetpack Compose
+
+</div>
+
   2. Localizar qué JAR en `BOOT-INF/lib` contiene esa clase y qué versión es.
   3. Ejecutar `mvn dependency:tree` para ver si hay versiones conflictivas presentes.
   4. Alinear versiones (upgrade/downgrade) o excluir la dependencia transitiva problemática.
@@ -138,42 +547,3 @@ Actualizaciones recientes (rama fix/springdoc-version)
 
 Cómo arrancar la aplicación contra Supabase (resumen rápido)
 
-1) Crear un fichero `.env` en `Bienestar/` con las variables (o exportarlas en el entorno):
-
-```
-SPRING_DATASOURCE_URL=jdbc:postgresql://<host>:5432/postgres?sslmode=require
-SPRING_DATASOURCE_USERNAME=postgres
-SPRING_DATASOURCE_PASSWORD=<tu_password>
-SPRING_FLYWAY_ENABLED=false
-APP_SIMPLE_MIGRATIONS_ENABLED=true
-SPRING_PROFILES_ACTIVE=cloud
-```
-
-2) Construir el JAR:
-
-```cmd
-cd "C:\Users\estiv\Documents\Visual Studio 2022\java\Proyecto-bienestar\Bienestar"
-mvn -DskipTests clean package
-```
-
-3) Ejecutar con las propiedades apuntando a Supabase (ejemplo con cmd.exe):
-
-```cmd
-java -Dspring.profiles.active=cloud -Dspring.datasource.url="jdbc:postgresql://<host>:5432/postgres?sslmode=require" -Dspring.datasource.username=postgres -Dspring.datasource.password="<tu_password>" -Dspring.flyway.enabled=false -Dapp.simple-migrations.enabled=true -jar target\Bienestar-0.0.1-SNAPSHOT.jar
-```
-
-4) Verificar migraciones y sesión de usuario:
-
-- Revisa en la base de datos que exista la tabla `flyway_schema_history` y las tablas de dominio (`usuarios`, `roles`, `servicios`, etc.).
-- Usa el script de verificación `scripts/do_login_post.ps1` (PowerShell) para reproducir un login y un POST a `/api/servicios`.
-
-Notas sobre Swagger / sesiones en el navegador
-
-- El proyecto permite form-login con CSRF activo por defecto. Para probar las APIs desde Swagger UI en el navegador asegúrate de estar autenticado con el formulario `/login` en la misma sesión del navegador antes de usar las operaciones protegidas en Swagger (Swagger UI no comparte la cookie JSESSIONID con otras pestañas/orígenes si el navegador la bloquea).
-- Si prefieres pruebas programáticas, usa `scripts/do_login_post.ps1` que preserva la cookie de sesión y maneja el token CSRF.
-
-Limpieza aplicada
-
-- Se eliminaron archivos temporales y de depuración que no deben estar versionados (cookies, logs de sesión). Añade en `.gitignore` para evitar volver a cometerlos.
-
-Si quieres que abra un PR con estos cambios y la rama limpia, dímelo y lo creo.
