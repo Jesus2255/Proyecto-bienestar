@@ -77,14 +77,29 @@ public class SecurityConfig {
               .defaultSuccessUrl("/", false) // false = no forzar redirección
               // ================================================================
           )
-          .logout(logout -> logout.permitAll());
+          .logout(logout -> logout
+              .logoutUrl("/logout") // La URL que escuchará para el logout
+              .permitAll()
+              // Handler para API/Android: devuelve 200 OK sin redirección
+              .logoutSuccessHandler((request, response, authentication) -> {
+                  response.setStatus(200); // HTTP 200 OK
+                  response.setContentType("application/json");
+                  response.setCharacterEncoding("UTF-8");
+                  response.getWriter().write("{\"message\":\"Logout successful\"}");
+                  response.getWriter().flush();
+              })
+              // Invalidar la sesión y limpiar la cookie
+              .invalidateHttpSession(true)
+              .deleteCookies("JSESSIONID")
+          );
 
         // H2 console and REST API endpoints: disable CSRF for these request paths so API clients (Postman/Swagger) can POST
         // NOTE: Disabling CSRF for API endpoints is acceptable for stateless API clients but evaluate for your threat model.
-        // IMPORTANTE: También deshabilitamos CSRF para /login cuando viene de una app móvil/API
+        // IMPORTANTE: También deshabilitamos CSRF para /login y /logout cuando viene de una app móvil/API
         http.csrf(csrf -> csrf.ignoringRequestMatchers(request -> {
             String uri = request.getRequestURI();
-            return uri.startsWith("/h2-console") || uri.startsWith("/api/") || uri.equals("/login");
+            return uri.startsWith("/h2-console") || uri.startsWith("/api/") 
+                || uri.equals("/login") || uri.equals("/logout");
         }));
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
