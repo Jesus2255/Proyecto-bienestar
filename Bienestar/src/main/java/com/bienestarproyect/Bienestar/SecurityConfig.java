@@ -8,6 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class SecurityConfig {
@@ -35,6 +40,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.authenticationProvider(authenticationProvider());
+
+        // Habilitar CORS para permitir requests desde el frontend React
+        http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
 
         http
           .authorizeHttpRequests(auth -> auth
@@ -104,5 +112,48 @@ public class SecurityConfig {
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        
+        // Permitir requests desde el frontend React en desarrollo y producción
+        configuration.setAllowedOrigins(Arrays.asList(
+            "http://localhost:5173",  // Vite dev server
+            "http://localhost:4173",  // Vite preview
+            "http://localhost:3000"   // Otros frameworks comunes
+        ));
+        
+        // Métodos HTTP permitidos
+        configuration.setAllowedMethods(Arrays.asList(
+            "GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"
+        ));
+        
+        // Headers permitidos
+        configuration.setAllowedHeaders(Arrays.asList(
+            "Authorization", 
+            "Content-Type", 
+            "X-Requested-With",
+            "Accept",
+            "Origin"
+        ));
+        
+        // CRÍTICO: Permitir cookies y headers de autenticación
+        configuration.setAllowCredentials(true);
+        
+        // Headers expuestos al cliente
+        configuration.setExposedHeaders(Arrays.asList(
+            "Set-Cookie",
+            "Authorization"
+        ));
+        
+        // Tiempo de cache de la configuración CORS (1 hora)
+        configuration.setMaxAge(3600L);
+        
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        
+        return source;
     }
 }

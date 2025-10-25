@@ -8,8 +8,9 @@ function App() {
   const { initializeAuth } = useAuthStore();
 
   useEffect(() => {
+    // Inicializar autenticación al cargar la app
     initializeAuth();
-  }, []);
+  }, [initializeAuth]);
 
   return (
     <>
