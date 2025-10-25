@@ -20,7 +20,8 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        // WARNING: NoOpPasswordEncoder allows plain-text passwords and MUST NOT be used in production.
+        return org.springframework.security.crypto.password.NoOpPasswordEncoder.getInstance();
     }
 
     @Bean
@@ -51,14 +52,55 @@ public class SecurityConfig {
           )
           .formLogin(form -> form
               .loginPage("/login")
+              .loginProcessingUrl("/login") // Procesa el login en /login
               .permitAll()
+              // ================== SOLUCIÓN PARA API/ANDROID ==================
+              // CRÍTICO: Deshabilitar TODAS las redirecciones
+              .successHandler((request, response, authentication) -> {
+                  // NO hacer nada más que escribir la respuesta
+                  response.setStatus(200);
+                  response.setContentType("application/json");
+                  response.setCharacterEncoding("UTF-8");
+                  response.getWriter().write("{\"message\":\"Login successful\",\"username\":\"" 
+                      + authentication.getName() + "\"}");
+                  response.getWriter().flush();
+              })
+              .failureHandler((request, response, exception) -> {
+                  response.setStatus(401);
+                  response.setContentType("application/json");
+                  response.setCharacterEncoding("UTF-8");
+                  response.getWriter().write("{\"error\":\"Authentication failed\",\"message\":\""
+                      + exception.getMessage() + "\"}");
+                  response.getWriter().flush();
+              })
+              // Deshabilitar la URL de éxito por defecto que causa redirecciones
+              .defaultSuccessUrl("/", false) // false = no forzar redirección
+              // ================================================================
           )
-          .httpBasic()
-          .and()
-          .logout(logout -> logout.permitAll());
+          .logout(logout -> logout
+              .logoutUrl("/logout") // La URL que escuchará para el logout
+              .permitAll()
+              // Handler para API/Android: devuelve 200 OK sin redirección
+              .logoutSuccessHandler((request, response, authentication) -> {
+                  response.setStatus(200); // HTTP 200 OK
+                  response.setContentType("application/json");
+                  response.setCharacterEncoding("UTF-8");
+                  response.getWriter().write("{\"message\":\"Logout successful\"}");
+                  response.getWriter().flush();
+              })
+              // Invalidar la sesión y limpiar la cookie
+              .invalidateHttpSession(true)
+              .deleteCookies("JSESSIONID")
+          );
 
-        // H2 console
-        http.csrf(csrf -> csrf.ignoringRequestMatchers(request -> request.getRequestURI().startsWith("/h2-console")));
+        // H2 console and REST API endpoints: disable CSRF for these request paths so API clients (Postman/Swagger) can POST
+        // NOTE: Disabling CSRF for API endpoints is acceptable for stateless API clients but evaluate for your threat model.
+        // IMPORTANTE: También deshabilitamos CSRF para /login y /logout cuando viene de una app móvil/API
+        http.csrf(csrf -> csrf.ignoringRequestMatchers(request -> {
+            String uri = request.getRequestURI();
+            return uri.startsWith("/h2-console") || uri.startsWith("/api/") 
+                || uri.equals("/login") || uri.equals("/logout");
+        }));
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();

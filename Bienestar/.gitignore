@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local / temporary ###
+.env
+cookies*.txt
+debug_session.txt
+*.log
+tmp_exploded/

@@ -1,0 +1,6 @@
+## Temporarily disabled automatic DB compatibility post-processor so Flyway
+## can run and apply migrations automatically. If your Flyway version does
+## not support PostgreSQL 17 this may cause startup failures; consider
+## updating Flyway in `pom.xml` or re-enabling this processor.
+# org.springframework.boot.env.EnvironmentPostProcessor=\
+# com.bienestarproyect.Bienestar.config.DbCompatibilityEnvironmentPostProcessor

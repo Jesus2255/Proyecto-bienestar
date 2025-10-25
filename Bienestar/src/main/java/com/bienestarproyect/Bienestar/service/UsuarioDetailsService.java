@@ -19,8 +19,16 @@ public class UsuarioDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(UsuarioDetailsService.class);
+        log.info("Attempting login for username='{}'", username);
+
         var usuario = usuarioRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+                .orElseThrow(() -> {
+                    log.warn("Usuario no encontrado: {}", username);
+                    return new UsernameNotFoundException("Usuario no encontrado: " + username);
+                });
+
+        log.info("Found user '{}' with roles {}", usuario.getUsername(), usuario.getRoles());
 
         Set<GrantedAuthority> authorities = usuario.getRoles().stream()
                 .map(r -> new SimpleGrantedAuthority("ROLE_" + r.getName()))

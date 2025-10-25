@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class LoginController {
     @GetMapping("/login")
     public String login() {
-        return "redirect:/login.html";
+        // return the Thymeleaf view name 'login' (templates/login.html)
+        return "login";
     }
 }

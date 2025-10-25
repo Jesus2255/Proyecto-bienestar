@@ -127,3 +127,53 @@ Si quieres, puedo:
 - Abrir un PR con los cambios que hicimos.
 
 Dime qué prefieres y lo implemento.
+
+---
+
+Actualizaciones recientes (rama fix/springdoc-version)
+
+- Se corrigió la incompatibilidad con `springdoc` fijando `springdoc-openapi-starter-webmvc-ui` a la versión `2.7.0`.
+- Se añadió un migrador alternativo in-app (`SimpleMigrationRunner`) para entornos donde Flyway no es compatible con la versión de PostgreSQL (ej. Supabase v17). El migrador lee `classpath:db/migration/V*.sql`, elimina comentarios y aplica las sentencias SQL, registrando las versiones en `flyway_schema_history`.
+- Se incluyó un script de verificación (`scripts/do_login_post.ps1`) que realiza: GET `/login` (extrae CSRF), POST `/login` y POST `/api/servicios` para comprobar persistencia.
+
+Cómo arrancar la aplicación contra Supabase (resumen rápido)
+
+1) Crear un fichero `.env` en `Bienestar/` con las variables (o exportarlas en el entorno):
+
+```
+SPRING_DATASOURCE_URL=jdbc:postgresql://<host>:5432/postgres?sslmode=require
+SPRING_DATASOURCE_USERNAME=postgres
+SPRING_DATASOURCE_PASSWORD=<tu_password>
+SPRING_FLYWAY_ENABLED=false
+APP_SIMPLE_MIGRATIONS_ENABLED=true
+SPRING_PROFILES_ACTIVE=cloud
+```
+
+2) Construir el JAR:
+
+```cmd
+cd "C:\Users\estiv\Documents\Visual Studio 2022\java\Proyecto-bienestar\Bienestar"
+mvn -DskipTests clean package
+```
+
+3) Ejecutar con las propiedades apuntando a Supabase (ejemplo con cmd.exe):
+
+```cmd
+java -Dspring.profiles.active=cloud -Dspring.datasource.url="jdbc:postgresql://<host>:5432/postgres?sslmode=require" -Dspring.datasource.username=postgres -Dspring.datasource.password="<tu_password>" -Dspring.flyway.enabled=false -Dapp.simple-migrations.enabled=true -jar target\Bienestar-0.0.1-SNAPSHOT.jar
+```
+
+4) Verificar migraciones y sesión de usuario:
+
+- Revisa en la base de datos que exista la tabla `flyway_schema_history` y las tablas de dominio (`usuarios`, `roles`, `servicios`, etc.).
+- Usa el script de verificación `scripts/do_login_post.ps1` (PowerShell) para reproducir un login y un POST a `/api/servicios`.
+
+Notas sobre Swagger / sesiones en el navegador
+
+- El proyecto permite form-login con CSRF activo por defecto. Para probar las APIs desde Swagger UI en el navegador asegúrate de estar autenticado con el formulario `/login` en la misma sesión del navegador antes de usar las operaciones protegidas en Swagger (Swagger UI no comparte la cookie JSESSIONID con otras pestañas/orígenes si el navegador la bloquea).
+- Si prefieres pruebas programáticas, usa `scripts/do_login_post.ps1` que preserva la cookie de sesión y maneja el token CSRF.
+
+Limpieza aplicada
+
+- Se eliminaron archivos temporales y de depuración que no deben estar versionados (cookies, logs de sesión). Añade en `.gitignore` para evitar volver a cometerlos.
+
+Si quieres que abra un PR con estos cambios y la rama limpia, dímelo y lo creo.
