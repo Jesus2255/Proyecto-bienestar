@@ -52,15 +52,39 @@ public class SecurityConfig {
           )
           .formLogin(form -> form
               .loginPage("/login")
+              .loginProcessingUrl("/login") // Procesa el login en /login
               .permitAll()
+              // ================== SOLUCIÓN PARA API/ANDROID ==================
+              // CRÍTICO: Deshabilitar TODAS las redirecciones
+              .successHandler((request, response, authentication) -> {
+                  // NO hacer nada más que escribir la respuesta
+                  response.setStatus(200);
+                  response.setContentType("application/json");
+                  response.setCharacterEncoding("UTF-8");
+                  response.getWriter().write("{\"message\":\"Login successful\",\"username\":\"" 
+                      + authentication.getName() + "\"}");
+                  response.getWriter().flush();
+              })
+              .failureHandler((request, response, exception) -> {
+                  response.setStatus(401);
+                  response.setContentType("application/json");
+                  response.setCharacterEncoding("UTF-8");
+                  response.getWriter().write("{\"error\":\"Authentication failed\",\"message\":\""
+                      + exception.getMessage() + "\"}");
+                  response.getWriter().flush();
+              })
+              // Deshabilitar la URL de éxito por defecto que causa redirecciones
+              .defaultSuccessUrl("/", false) // false = no forzar redirección
+              // ================================================================
           )
           .logout(logout -> logout.permitAll());
 
         // H2 console and REST API endpoints: disable CSRF for these request paths so API clients (Postman/Swagger) can POST
         // NOTE: Disabling CSRF for API endpoints is acceptable for stateless API clients but evaluate for your threat model.
+        // IMPORTANTE: También deshabilitamos CSRF para /login cuando viene de una app móvil/API
         http.csrf(csrf -> csrf.ignoringRequestMatchers(request -> {
             String uri = request.getRequestURI();
-            return uri.startsWith("/h2-console") || uri.startsWith("/api/");
+            return uri.startsWith("/h2-console") || uri.startsWith("/api/") || uri.equals("/login");
         }));
         http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
